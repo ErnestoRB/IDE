@@ -1,38 +1,91 @@
 import { SideBar } from "./side/SideBar";
-import { ResizablePanel } from "./ResizablePanel";
 import { SideBarContent } from "./side/SideBarContent";
 import { Editor } from "./editor/Editor";
-import { useEffect } from "react";
-
-const handleKeyPresses: (ev: KeyboardEvent) => any = (evt: KeyboardEvent) => {
-  if (evt.ctrlKey) {
-    if (evt.key == "j") {
-      console.log("CTRL J");
-    }
-  }
-};
+import { useCallback, useEffect, useRef } from "react";
+import { TerminalPanel } from "./terminal/TerminalPanel";
+import { useLayoutStore } from "./stores/layout";
+import {
+  ImperativePanelHandle,
+  Panel,
+  PanelGroup,
+  PanelResizeHandle,
+} from "react-resizable-panels";
+import { CommandPanel } from "./commands/CommandPanel";
+import { StatusBar } from "./StatusBar";
 
 function App() {
-  useEffect(() => {
-    document.addEventListener("keydown", (evt) => {
-      handleKeyPresses(evt);
-    });
+  const lateralRef = useRef<ImperativePanelHandle>(null);
+  const terminalRef = useRef<ImperativePanelHandle>(null);
+  const { setLateralPanelRef, setTerminalPanelRef } = useLayoutStore();
 
+  const toggleTerminal = () => {
+    const panel = terminalRef.current;
+    if (!panel) {
+      return;
+    }
+    if (panel) {
+      if (panel.isCollapsed()) {
+        panel.expand();
+      } else {
+        panel.collapse();
+      }
+    }
+  };
+
+  const keyHandler = useCallback((evt: KeyboardEvent) => {
+    if (evt.ctrlKey) {
+      if (evt.key == "j") {
+        console.log("toggle");
+        toggleTerminal();
+      }
+    }
+  }, []);
+  useEffect(() => {
+    document.addEventListener("keydown", keyHandler);
     () => {
-      document.removeEventListener("keydown", handleKeyPresses);
+      document.removeEventListener("keydown", keyHandler);
     };
+  }, [keyHandler]);
+
+  useEffect(() => {
+    console.log(lateralRef.current);
+    console.log(terminalRef.current);
+
+    setLateralPanelRef(lateralRef.current!);
+    setTerminalPanelRef(terminalRef.current!);
   }, []);
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex flex-1 bg-black w-full ">
+    <div className="flex flex-col h-screen max-h-screen overflow-hidden">
+      <CommandPanel></CommandPanel>
+      <div className="flex bg-black w-full h-full flex-initial">
         <SideBar></SideBar>
-        <ResizablePanel>
-          <SideBarContent></SideBarContent>
-          <Editor></Editor>
-        </ResizablePanel>
+        <PanelGroup autoSaveId="lateral" direction="horizontal">
+          <Panel
+            collapsible
+            defaultSize={20}
+            minSize={12}
+            maxSize={40}
+            ref={lateralRef}
+          >
+            <SideBarContent></SideBarContent>
+          </Panel>
+          <PanelResizeHandle />
+          <Panel>
+            <PanelGroup autoSaveId="terminal" direction="vertical">
+              <Panel minSize={10}>
+                <Editor></Editor>
+              </Panel>
+              <PanelResizeHandle />
+              <Panel minSize={20} collapsible ref={terminalRef}>
+                <TerminalPanel></TerminalPanel>
+              </Panel>
+            </PanelGroup>
+          </Panel>
+          <PanelResizeHandle />
+        </PanelGroup>
       </div>
-      <div className=" bg-stone-900 h-5 w-full"></div>
+      <StatusBar></StatusBar>
     </div>
   );
 }
