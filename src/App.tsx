@@ -48,15 +48,12 @@ function App() {
   }, [keyHandler]);
 
   useEffect(() => {
-    console.log(lateralRef.current);
-    console.log(terminalRef.current);
-
     setLateralPanelRef(lateralRef.current!);
     setTerminalPanelRef(terminalRef.current!);
   }, []);
 
   return (
-    <div className="flex flex-col h-screen max-h-screen overflow-hidden">
+    <div className="flex flex-col h-screen max-h-screen overflow-hidden select-none">
       <CommandPanel></CommandPanel>
       <div className="flex bg-black w-full h-full flex-initial">
         <SideBar></SideBar>

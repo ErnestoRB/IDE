@@ -3,10 +3,18 @@ import { useEffect, useState } from "react";
 import { useLayoutStore } from "../stores/layout";
 import { useEditor } from "../stores/editor";
 import { KeyCode, KeyMod } from "monaco-editor";
+import { useFileStore } from "../stores/files";
 
 export function Editor() {
   const { terminalPanelRef, toggleCommand, lateralPanelRef } = useLayoutStore();
   const { editor, setEditor, setCursor } = useEditor();
+  const { activeFile } = useFileStore();
+
+  useEffect(() => {
+    if (editor && activeFile) {
+      editor.setValue(activeFile.content);
+    }
+  }, [activeFile, editor]);
 
   useEffect(() => {
     if (editor && terminalPanelRef) {

@@ -1,6 +1,6 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use tauri::{CustomMenuItem, Manager, Menu, Submenu};
+use tauri::{CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -9,11 +9,12 @@ fn greet(name: &str) -> String {
 }
 
 fn main() {
-    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
     let close = CustomMenuItem::new("close".to_string(), "Close");
-    let open = CustomMenuItem::new("open_file".to_string(), "Open");
-    let save = CustomMenuItem::new("save_file".to_string(), "Save");
-    let save_as = CustomMenuItem::new("save_file_as".to_string(), "Save As");
+    let close_file = CustomMenuItem::new("close_file".to_string(), "Close file");
+    let open = CustomMenuItem::new("open_file".to_string(), "Open").accelerator("CmdOrControl+O");
+    let save = CustomMenuItem::new("save_file".to_string(), "Save").accelerator("CmdOrControl+S");
+    let save_as = CustomMenuItem::new("save_file_as".to_string(), "Save As")
+        .accelerator("CmdOrControl+Shift+S");
 
     let file_sub = Submenu::new(
         "File",
@@ -21,7 +22,15 @@ fn main() {
             .add_item(open)
             .add_item(save)
             .add_item(save_as)
-            .add_item(close),
+            .add_item(close_file),
+    );
+
+    let edit_sub = Submenu::new(
+        "Edit",
+        Menu::new()
+            .add_native_item(MenuItem::Paste)
+            .add_native_item(MenuItem::Copy)
+            .add_native_item(MenuItem::Cut),
     );
 
     let lexico = CustomMenuItem::new("lexico".to_string(), "Lexico");
@@ -37,9 +46,9 @@ fn main() {
             .add_item(semantico),
     );
 
-    let edit_sub = Submenu::new("Editar", Menu::new());
+    let default_menu = Menu::new().add_native_item(MenuItem::Quit).add_item(close);
     let menu = Menu::new()
-        .add_submenu(Submenu::new("", Menu::new().add_item(quit)))
+        .add_submenu(Submenu::new("", default_menu))
         .add_submenu(file_sub)
         .add_submenu(edit_sub)
         .add_submenu(build_sub);

@@ -6,8 +6,8 @@ export interface IFileItemProps {
 }
 export function FileItem({ file: { name } }: IFileItemProps) {
   return (
-    <div className="px-2 text-sm text-white w-full bg-stone-800 hover:bg-stone-900 flex items-center gap-2">
-      <GoFileCode></GoFileCode> {name}
+    <div className="overflow-clip px-2 text-sm text-white w-full bg-stone-800 hover:bg-stone-900 flex items-center gap-2">
+      <GoFileCode className="min-w-fit"></GoFileCode> {name}
     </div>
   );
 }
