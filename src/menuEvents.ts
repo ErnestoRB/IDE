@@ -32,7 +32,7 @@ export const openEditorFile = async () => {
   }
 };
 
-const saveEditorFileAs = async () => {
+export const saveEditorFileAs = async () => {
   const content = useEditor.getState().editor?.getValue() ?? "";
 
   const savePath = await save();
@@ -47,7 +47,7 @@ const saveEditorFileAs = async () => {
   }
 };
 
-const saveEditorFile = async () => {
+export const saveEditorFile = async () => {
   const file = useFileStore.getState().activeFile;
   if (!file) {
     await saveEditorFileAs();
@@ -55,6 +55,11 @@ const saveEditorFile = async () => {
   }
   const content = useEditor.getState().editor?.getValue() ?? "";
   await writeTextFile(file.path, content);
+};
+
+export const closeFile = async () => {
+  useFileStore.setState({ activeFile: undefined, files: [] });
+  useEditor.getState().editor?.setValue("");
 };
 
 if (window.__TAURI_IPC__) {
@@ -71,8 +76,7 @@ if (window.__TAURI_IPC__) {
           await saveEditorFileAs();
           break;
         case "close_file":
-          useFileStore.setState({ activeFile: undefined, files: [] });
-          useEditor.getState().editor?.setValue("");
+          await closeFile();
           break;
       }
     }
