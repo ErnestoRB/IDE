@@ -46,11 +46,16 @@ fn main() {
             .add_item(semantico),
     );
 
+    let toggle_nav = CustomMenuItem::new("toggle_nav", "Toggle nav").accelerator("CmdOrControl+H");
+
+    let view_menu = Submenu::new("View", Menu::new().add_item(toggle_nav));
+
     let default_menu = Menu::new().add_native_item(MenuItem::Quit).add_item(close);
     let menu = Menu::new()
         .add_submenu(Submenu::new("", default_menu))
         .add_submenu(file_sub)
         .add_submenu(edit_sub)
+        .add_submenu(view_menu)
         .add_submenu(build_sub);
     tauri::Builder::default()
         .setup(|app| {

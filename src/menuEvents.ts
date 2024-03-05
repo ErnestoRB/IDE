@@ -4,6 +4,7 @@ import { fs, path } from "@tauri-apps/api";
 import { IFileContent, useFileStore } from "./stores/files";
 import { writeTextFile } from "@tauri-apps/api/fs";
 import { useEditor } from "./stores/editor";
+import { useLayoutStore } from "./stores/layout";
 
 export const openEditorFile = async () => {
   // Open a selection dialog for image files
@@ -62,23 +63,25 @@ export const closeFile = async () => {
   useEditor.getState().editor?.setValue("");
 };
 
+//@ts-ignore
 if (window.__TAURI_IPC__) {
-  const unlisten = await appWindow.onMenuClicked(
-    async ({ payload: menuId }) => {
-      switch (menuId) {
-        case "open_file":
-          await openEditorFile();
-          break;
-        case "save_file":
-          await saveEditorFile();
-          break;
-        case "save_file_as":
-          await saveEditorFileAs();
-          break;
-        case "close_file":
-          await closeFile();
-          break;
-      }
+  appWindow.onMenuClicked(async ({ payload: menuId }) => {
+    switch (menuId) {
+      case "open_file":
+        await openEditorFile();
+        break;
+      case "save_file":
+        await saveEditorFile();
+        break;
+      case "save_file_as":
+        await saveEditorFileAs();
+        break;
+      case "close_file":
+        await closeFile();
+        break;
+      case "toggle_nav":
+        useLayoutStore.getState().toggleNavbar();
+        break;
     }
-  );
+  });
 }

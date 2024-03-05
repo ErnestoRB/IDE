@@ -4,7 +4,7 @@ import { Editor } from "./editor/Editor";
 import { useCallback, useEffect, useRef } from "react";
 import { TerminalPanel } from "./terminal/TerminalPanel";
 import { useLayoutStore } from "./stores/layout";
-import { NavBar } from "./side/NavBar"
+import { NavBar } from "./side/NavBar";
 
 import {
   ImperativePanelHandle,
@@ -18,7 +18,8 @@ import { StatusBar } from "./StatusBar";
 function App() {
   const lateralRef = useRef<ImperativePanelHandle>(null);
   const terminalRef = useRef<ImperativePanelHandle>(null);
-  const { setLateralPanelRef, setTerminalPanelRef } = useLayoutStore();
+  const { setLateralPanelRef, setTerminalPanelRef, showNavbar } =
+    useLayoutStore();
 
   const toggleTerminal = () => {
     const panel = terminalRef.current;
@@ -55,8 +56,8 @@ function App() {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen max-h-screen overflow-hidden select-none"> 
-      <NavBar></NavBar>
+    <div className="flex flex-col h-screen max-h-screen overflow-hidden select-none">
+      {showNavbar && <NavBar></NavBar>}
       <CommandPanel></CommandPanel>
       <div className="flex bg-black w-full h-full flex-initial">
         <SideBar></SideBar>

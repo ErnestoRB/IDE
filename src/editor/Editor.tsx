@@ -71,7 +71,7 @@ export function Editor() {
         className="min-h-0 min-w-0"
         defaultLanguage="javascript"
         defaultValue="// Example"
-        onMount={(editor, monaco) => {
+        onMount={(editor) => {
           setEditor(editor);
           setMounted(true);
         }}
