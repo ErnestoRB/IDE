@@ -32,9 +32,13 @@
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.0.2",
-    "vite": "^5.0.0"
+    "vite": "^5.1.4"
   },
   "peerDependencies": {
     "monaco-editor": "^0.46.0"
-  }
+  },
+  "description": "This template should help get you started developing with Tauri, React and Typescript in Vite.",
+  "main": "postcss.config.js",
+  "author": "",
+  "license": "ISC"
 }

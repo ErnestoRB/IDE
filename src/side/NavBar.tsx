@@ -2,6 +2,7 @@ import { OpenIcon } from "./items/OpenIcon";
 import { SaveIcon } from "./items/SaveIcon";
 import { SaveAsIcon } from "./items/SaveAsIcon";
 import { CloseFileIcon } from "./items/CloseFileIcon";
+import { CompilerButton } from "./items/CompilerButton";
 
 export function NavBar() {
   return (
@@ -11,6 +12,7 @@ export function NavBar() {
       <CloseFileIcon></CloseFileIcon>
       <SaveIcon></SaveIcon>
       <SaveAsIcon></SaveAsIcon>
+      <CompilerButton></CompilerButton>
     </div>
   );
 }
