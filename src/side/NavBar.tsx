@@ -8,9 +8,9 @@ export function NavBar() {
     <div
       className="flex bg-stone-900">
       <OpenIcon></OpenIcon>
+      <CloseFileIcon></CloseFileIcon>
       <SaveIcon></SaveIcon>
       <SaveAsIcon></SaveAsIcon>
-      <CloseFileIcon></CloseFileIcon>
     </div>
   );
 }
