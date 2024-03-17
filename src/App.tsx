@@ -14,6 +14,9 @@ import {
 } from "react-resizable-panels";
 import { CommandPanel } from "./commands/CommandPanel";
 import { StatusBar } from "./StatusBar";
+import { loader } from "@monaco-editor/react";
+import { setupVainilla } from "./monaco/vainilla";
+loader.init().then(setupVainilla);
 
 function App() {
   const lateralRef = useRef<ImperativePanelHandle>(null);

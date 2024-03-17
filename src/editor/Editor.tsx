@@ -4,6 +4,7 @@ import { useLayoutStore } from "../stores/layout";
 import { useEditor } from "../stores/editor";
 import { KeyCode, KeyMod } from "monaco-editor";
 import { useFileStore } from "../stores/files";
+import { VAINILLA_ID } from "../monaco/vainilla";
 
 export function Editor() {
   const { terminalPanelRef, toggleCommand, lateralPanelRef } = useLayoutStore();
@@ -69,9 +70,9 @@ export function Editor() {
       )}
       <MonacoEditor
         className="min-h-0 min-w-0"
-        defaultLanguage="javascript"
+        defaultLanguage={VAINILLA_ID.id}
         defaultValue="// Example"
-        onMount={(editor) => {
+        onMount={(editor, monaco) => {
           setEditor(editor);
           setMounted(true);
         }}
