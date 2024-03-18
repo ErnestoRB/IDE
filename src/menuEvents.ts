@@ -5,6 +5,7 @@ import { IFileContent, useFileStore } from "./stores/files";
 import { writeTextFile } from "@tauri-apps/api/fs";
 import { useEditor } from "./stores/editor";
 import { useLayoutStore } from "./stores/layout";
+import { scanFile } from "./build/scan";
 
 export const openEditorFile = async () => {
   // Open a selection dialog for image files
@@ -63,6 +64,9 @@ export const closeFile = async () => {
   useEditor.getState().editor?.setValue("");
 };
 
+export const lexico = async () =>
+  await scanFile(useEditor.getState().editor?.getValue() ?? "");
+
 //@ts-ignore
 if (window.__TAURI_IPC__) {
   appWindow.onMenuClicked(async ({ payload: menuId }) => {
@@ -81,6 +85,9 @@ if (window.__TAURI_IPC__) {
         break;
       case "toggle_nav":
         useLayoutStore.getState().toggleNavbar();
+        break;
+      case "lexico":
+        await lexico();
         break;
     }
   });

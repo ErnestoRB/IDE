@@ -4,6 +4,7 @@ import { BsAlphabetUppercase } from "react-icons/bs";
 import { MdMenuBook } from "react-icons/md";
 import { BsGear } from "react-icons/bs";
 import { GoChevronDown } from "react-icons/go";
+import { lexico } from "../../menuEvents";
 
 export function CompilerButton() {
   return (
@@ -40,13 +41,14 @@ export function CompilerButton() {
           </Menu.Item>
           <Menu.Item>
             {({ active }) => (
-              <a
+              <button
+                onClick={lexico}
                 className={`${
                   active && "hover:bg-black"
                 } w-full h-full px-3 py-2 gap-4 place-items-center flex justify-between`}
               >
                 Léxico <BsAlphabetUppercase />
-              </a>
+              </button>
             )}
           </Menu.Item>
         </Menu.Items>
