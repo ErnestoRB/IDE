@@ -27,12 +27,7 @@ const VAINILLA_LANG: languages.IMonarchLanguage = {
     "=", // asignacion
   ],
   symbols: /[=><!~?:&|+\-*\/\^%]+/,
-  comment: [
-    [/[^\/*]+/, "comment"],
-    [/\/\*/, "comment", "@push"], // nested comment
-    ["\\*/", "comment", "@pop"],
-    [/[\/*]/, "comment"],
-  ],
+
   tokenizer: {
     root: [
       [
@@ -46,6 +41,8 @@ const VAINILLA_LANG: languages.IMonarchLanguage = {
           },
         },
       ], // para identificadores
+      { include: "@whitespace" },
+
       [
         /@symbols/,
         {
@@ -57,10 +54,21 @@ const VAINILLA_LANG: languages.IMonarchLanguage = {
           },
         },
       ],
+      // whitespace
       [/[+-]*\d*\.\d+/, "number.float"], //tokenizar numeros
       [/\d+/, "number"],
-      [/\/\//, "comment"], //comentarios
-      [/\/\*.*\*\//, "comment"], //comentarios de bloque
+    ],
+    comment: [
+      [/[^\/*]+/, "comment"],
+      // [/\/\*/, 'comment', '@push' ],    // nested comment not allowed :-(
+      // [/\/\*/,    'comment.invalid' ],    // this breaks block comments in the shape of /* //*/
+      [/\*\//, "comment", "@pop"],
+      [/[\/*]/, "comment"],
+    ],
+    whitespace: [
+      [/[ \t\r\n]+/, "white"],
+      [/\/\*/, "comment", "@comment"],
+      [/\/\/.*$/, "comment"],
     ],
   },
 };
