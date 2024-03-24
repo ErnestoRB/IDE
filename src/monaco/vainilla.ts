@@ -74,10 +74,14 @@ const VAINILLA_LANG: languages.IMonarchLanguage = {
 };
 
 export const VAINILLA_THEME = `${VAINILLA_ID.id}-theme`;
+export const VAINILLA_THEME_DARK = `${VAINILLA_ID.id}-dark-theme`;
 
-export function setupVainilla(monaco: ReturnType<typeof useMonaco>) {
+export function setupVainilla(monaco: ReturnType<typeof useMonaco>, darkTheme: boolean) {
   monaco?.languages.register(VAINILLA_ID);
   monaco?.languages.setMonarchTokensProvider(VAINILLA_ID.id, VAINILLA_LANG);
+
+  const theme = darkTheme ? VAINILLA_THEME_DARK : VAINILLA_THEME;
+
   monaco?.editor.defineTheme(VAINILLA_THEME, {
     base: "vs",
     inherit: false,
@@ -106,7 +110,33 @@ export function setupVainilla(monaco: ReturnType<typeof useMonaco>) {
       },
     ],
   });
-  monaco?.editor.setTheme(VAINILLA_THEME);
+
+  monaco?.editor.defineTheme(VAINILLA_THEME_DARK, {
+    base: "vs-dark",
+    inherit: false,
+    colors: {
+      "editor.foreground": "#ABB2BF",
+      "editor.background": "#282C34",
+      "editor.selectionBackground": "#3E4451",
+      "editor.lineHighlightBackground": "#2C313A",
+      "editorCursor.foreground": "#528BFF",
+      "editorWhitespace.foreground": "#3B4048",
+    },
+    rules: [
+      { token: "keyword", foreground: "ff9d00", fontStyle: "bold" },
+      { token: "typeKeyword", foreground: "ff9d00", fontStyle: "bold" },
+      { token: "comment", foreground: "5c6370" },
+      { token: "number", foreground: "3db0a5" },
+      { token: "identifier", foreground: "dcdcaa" },
+      { token: "arithmeticOp", foreground: "dcdcaa" },
+      { token: "relationalOp", foreground: "dcdcaa" },
+      { token: "logicalOp", foreground: "dcdcaa" },
+      { token: "assignment", foreground: "3db0a5" },
+    ],
+  });
+
+
+  monaco?.editor.setTheme(theme);
 
   monaco?.languages.registerCompletionItemProvider(VAINILLA_ID.id, {
     provideCompletionItems: (model, position) => {
