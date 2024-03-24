@@ -1,15 +1,17 @@
-import { Editor as MonacoEditor } from "@monaco-editor/react";
+import { Editor as MonacoEditor, useMonaco } from "@monaco-editor/react";
 import { useEffect, useState } from "react";
 import { useLayoutStore } from "../stores/layout";
 import { useEditor } from "../stores/editor";
 import { KeyCode, KeyMod } from "monaco-editor";
 import { useFileStore } from "../stores/files";
 import { VAINILLA_ID, VAINILLA_THEME } from "../monaco/vainilla";
+import { scanFile } from "../build/scan";
 
 export function Editor() {
   const { terminalPanelRef, toggleCommand, lateralPanelRef } = useLayoutStore();
   const { editor, setEditor, setCursor } = useEditor();
   const { activeFile } = useFileStore();
+  const monaco = useMonaco();
 
   useEffect(() => {
     if (editor && activeFile) {
@@ -76,6 +78,23 @@ export function Editor() {
         onMount={(editor, monaco) => {
           setEditor(editor);
           setMounted(true);
+        }}
+        onChange={(str) => {
+          if (!str || !editor || !monaco) return;
+          scanFile(str).then((v) => {
+            monaco.editor.setModelMarkers(
+              editor.getModel()!,
+              "",
+              v[1].map((v) => ({
+                endColumn: v.position.col,
+                startColumn: v.position.col,
+                startLineNumber: v.position.lin,
+                endLineNumber: v.position.lin,
+                message: v.message,
+                severity: monaco.MarkerSeverity.Error,
+              }))
+            );
+          });
         }}
       />
     </>
