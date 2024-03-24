@@ -5,11 +5,13 @@ import { persist } from "zustand/middleware";
 export type IFileContent = IFileItem & {
   content: string;
 };
+
 interface IFileStore {
   files: IFileContent[];
   setFiles: (files: IFileContent[]) => unknown;
   activeFile?: IFileContent;
   setActiveFile: (file: IFileContent) => unknown;
+  lexicoResult: string | null | unknown;
 }
 
 export const useFileStore = create<IFileStore>()(
@@ -19,6 +21,7 @@ export const useFileStore = create<IFileStore>()(
       activeFile: undefined,
       setFiles: (files) => set({ files }),
       setActiveFile: (file) => set({ activeFile: file }),
+      lexicoResult: null,
     }),
     { name: "files" }
   )

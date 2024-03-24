@@ -50,7 +50,7 @@ export function CompilerButton() {
                 Léxico <BsAlphabetUppercase />
               </button>
             )}
-          </Menu.Item>
+          </Menu.Item> 
         </Menu.Items>
       </Menu>
     </div>
