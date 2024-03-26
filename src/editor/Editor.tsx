@@ -11,6 +11,8 @@ export function Editor() {
   const { terminalPanelRef, toggleCommand, lateralPanelRef } = useLayoutStore();
   const { editor, setEditor, setCursor } = useEditor();
   const { activeFile } = useFileStore();
+  const setLexicoResult = useFileStore((s) => s.setLexicoResult);
+
   const theme = useEditor((s) => s.theme);
   const monaco = useMonaco();
 
@@ -90,6 +92,7 @@ export function Editor() {
         onChange={(str) => {
           if (!str || !editor || !monaco) return;
           scanFile(str).then((v) => {
+            setLexicoResult(v);
             monaco.editor.setModelMarkers(
               editor.getModel()!,
               "",

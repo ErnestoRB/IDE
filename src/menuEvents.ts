@@ -69,7 +69,6 @@ export const lexico = async () => {
   try {
     const result = await scanFile(useEditor.getState().editor?.getValue() ?? "");
     useFileStore.setState({ lexicoResult : result });
-    console.log(result)
   } catch (error) {
     console.error(error);
   }
