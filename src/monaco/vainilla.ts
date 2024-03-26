@@ -76,29 +76,27 @@ const VAINILLA_LANG: languages.IMonarchLanguage = {
 export const VAINILLA_THEME = `${VAINILLA_ID.id}-theme`;
 export const VAINILLA_THEME_DARK = `${VAINILLA_ID.id}-dark-theme`;
 
-export function setupVainilla(monaco: ReturnType<typeof useMonaco>, darkTheme: boolean) {
+export function setupVainilla(monaco: ReturnType<typeof useMonaco>) {
   monaco?.languages.register(VAINILLA_ID);
   monaco?.languages.setMonarchTokensProvider(VAINILLA_ID.id, VAINILLA_LANG);
-
-  const theme = darkTheme ? VAINILLA_THEME_DARK : VAINILLA_THEME;
 
   monaco?.editor.defineTheme(VAINILLA_THEME, {
     base: "vs",
     inherit: false,
     colors: {},
     rules: [
-      { token: "keyword", foreground: "ff7edb", fontStyle: "bold" },
+      { token: "keyword", foreground: "ff7edb", fontStyle: "bold" }, // color 4
       { token: "typeKeyword", foreground: "ff7edb", fontStyle: "bold" },
-      { token: "comment", foreground: "848bbd" },
-      { token: "number", foreground: "00ff00" },
-      { token: "identifier", foreground: "00bcb2" },
+      { token: "comment", foreground: "848bbd" }, // color 3
+      { token: "number", foreground: "9f6dff" }, // color 1
+      { token: "identifier", foreground: "00bcb2" }, // color 2
       {
-        token: "arithmeticOp",
-        foreground: "c75300",
+        token: "arithmeticOp", // color 5
+        foreground: "ff3d2a",
       },
       {
-        token: "relationalOp",
-        foreground: "656abf",
+        token: "relationalOp", // color 6
+        foreground: "566ef7",
       },
       {
         token: "logicalOp",
@@ -106,7 +104,7 @@ export function setupVainilla(monaco: ReturnType<typeof useMonaco>, darkTheme: b
       },
       {
         token: "assignment",
-        foreground: "00ff00",
+        foreground: "000000",
       },
     ],
   });
@@ -134,9 +132,6 @@ export function setupVainilla(monaco: ReturnType<typeof useMonaco>, darkTheme: b
       { token: "assignment", foreground: "3db0a5" },
     ],
   });
-
-
-  monaco?.editor.setTheme(theme);
 
   monaco?.languages.registerCompletionItemProvider(VAINILLA_ID.id, {
     provideCompletionItems: (model, position) => {

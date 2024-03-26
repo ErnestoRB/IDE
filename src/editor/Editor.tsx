@@ -4,13 +4,14 @@ import { useLayoutStore } from "../stores/layout";
 import { useEditor } from "../stores/editor";
 import { KeyCode, KeyMod } from "monaco-editor";
 import { useFileStore } from "../stores/files";
-import { VAINILLA_ID, VAINILLA_THEME } from "../monaco/vainilla";
+import { VAINILLA_ID } from "../monaco/vainilla";
 import { scanFile } from "../build/scan";
 
 export function Editor() {
   const { terminalPanelRef, toggleCommand, lateralPanelRef } = useLayoutStore();
   const { editor, setEditor, setCursor } = useEditor();
   const { activeFile } = useFileStore();
+  const theme = useEditor((s) => s.theme);
   const monaco = useMonaco();
 
   useEffect(() => {
@@ -18,6 +19,12 @@ export function Editor() {
       editor.setValue(activeFile.content);
     }
   }, [activeFile, editor]);
+
+  useEffect(() => {
+    if (monaco) {
+      monaco.editor.setTheme(theme);
+    }
+  }, [monaco, theme]);
 
   useEffect(() => {
     if (editor && terminalPanelRef) {
@@ -74,11 +81,12 @@ export function Editor() {
         className="min-h-0 min-w-0"
         defaultLanguage={VAINILLA_ID.id}
         defaultValue="// Example"
-        theme={VAINILLA_THEME}
+        theme={theme}
         onMount={(editor, monaco) => {
           setEditor(editor);
           setMounted(true);
         }}
+        options={{}}
         onChange={(str) => {
           if (!str || !editor || !monaco) return;
           scanFile(str).then((v) => {
