@@ -12,10 +12,10 @@ import {
   PanelGroup,
   PanelResizeHandle,
 } from "react-resizable-panels";
-import { CommandPanel } from "./commands/CommandPanel";
 import { StatusBar } from "./StatusBar";
 import { loader } from "@monaco-editor/react";
 import { setupVainilla } from "./monaco/vainilla";
+import { AppModal } from "./AppModal";
 loader.init().then(setupVainilla);
 
 function App() {
@@ -60,8 +60,8 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen max-h-screen overflow-hidden select-none">
+      <AppModal />
       {showNavbar && <NavBar></NavBar>}
-      <CommandPanel></CommandPanel>
       <div className="flex bg-black w-full h-full flex-initial">
         <SideBar></SideBar>
         <PanelGroup autoSaveId="lateral" direction="horizontal">

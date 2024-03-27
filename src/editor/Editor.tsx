@@ -2,13 +2,13 @@ import { Editor as MonacoEditor, useMonaco } from "@monaco-editor/react";
 import { useEffect, useState } from "react";
 import { useLayoutStore } from "../stores/layout";
 import { useEditor } from "../stores/editor";
-import { KeyCode, KeyMod } from "monaco-editor";
 import { useFileStore } from "../stores/files";
 import { VAINILLA_ID } from "../monaco/vainilla";
 import { scanFile } from "../build/scan";
+import { setupEditorCommands } from "./setup";
 
 export function Editor() {
-  const { terminalPanelRef, toggleCommand, lateralPanelRef } = useLayoutStore();
+  const { terminalPanelRef, lateralPanelRef } = useLayoutStore();
   const { editor, setEditor, setCursor } = useEditor();
   const { activeFile } = useFileStore();
   const setLexicoResult = useFileStore((s) => s.setLexicoResult);
@@ -23,37 +23,21 @@ export function Editor() {
   }, [activeFile, editor]);
 
   useEffect(() => {
+    if (!editor) return;
+    editor.onDidChangeCursorPosition((e) =>
+      setCursor(e.position.lineNumber, e.position.column)
+    );
+  }, [editor]);
+
+  useEffect(() => {
     if (monaco) {
       monaco.editor.setTheme(theme);
     }
   }, [monaco, theme]);
 
   useEffect(() => {
-    if (editor && terminalPanelRef) {
-      editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyJ, () => {
-        if (terminalPanelRef) {
-          if (terminalPanelRef.isCollapsed()) {
-            terminalPanelRef.expand();
-          } else {
-            terminalPanelRef.collapse();
-          }
-        }
-      });
-      editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyP, () => {
-        toggleCommand();
-      });
-      editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyB, () => {
-        if (lateralPanelRef) {
-          if (lateralPanelRef.isCollapsed()) {
-            lateralPanelRef.expand();
-          } else {
-            lateralPanelRef.collapse();
-          }
-        }
-      });
-      editor.onDidChangeCursorPosition((e) =>
-        setCursor(e.position.lineNumber, e.position.column)
-      );
+    if (editor && terminalPanelRef && lateralPanelRef) {
+      setupEditorCommands(editor, terminalPanelRef, lateralPanelRef);
     }
   }, [editor, terminalPanelRef]);
 

@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { ImperativePanelHandle } from "react-resizable-panels";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -7,9 +8,10 @@ export interface ILayoutStore {
   terminalPanelRef?: ImperativePanelHandle;
   setTerminalPanelRef: (ref: ImperativePanelHandle) => unknown;
   setLateralPanelRef: (ref: ImperativePanelHandle) => unknown;
-  commandPanel: boolean;
-  showCommand: (show: boolean) => unknown;
-  toggleCommand: () => unknown;
+  isModalOpen: boolean;
+  closeModal: () => unknown;
+  openModal: (content: React.ReactNode) => unknown;
+  modalContent?: React.ReactNode;
   showNavbar: boolean;
   toggleNavbar: () => unknown;
 }
@@ -20,9 +22,9 @@ export const useLayoutStore = create<ILayoutStore>()(
         set({ terminalPanelRef: ref }),
       setLateralPanelRef: (ref: ImperativePanelHandle) =>
         set({ lateralPanelRef: ref }),
-      commandPanel: false,
-      showCommand: (show: boolean) => set({ commandPanel: show }),
-      toggleCommand: () => set({ commandPanel: !get().commandPanel }),
+      isModalOpen: false,
+      openModal: (node: ReactNode) => set({ modalContent: node }),
+      closeModal: () => set({ isModalOpen: !get().isModalOpen }),
       showNavbar: true,
       toggleNavbar: () => set({ showNavbar: !get().showNavbar }),
     }),
