@@ -44,7 +44,7 @@ export const Tabs: TabItem[] = [
     content: <Semantico></Semantico>,
   },
   {
-    name: "Codigo Intermedio esto es muy largo",
+    name: "Codigo Intermedio",
     icon: GoFileBinary,
     content: <Intermedio></Intermedio>,
   },
