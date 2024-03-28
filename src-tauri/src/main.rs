@@ -1,5 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+use std::env::Vars;
+
 use scanner::tokenize;
 use tauri::{CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 
@@ -7,6 +9,19 @@ use tauri::{CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
+}
+
+#[tauri::command]
+fn get_env(name: &str) -> String {
+    std::env::var(String::from(name)).unwrap_or(String::from(""))
+}
+#[tauri::command]
+fn get_envs() -> Vec<(String, String)> {
+    let mut vars: Vec<(String, String)> = vec![];
+    for (key, value) in std::env::vars() {
+        vars.push((key, value));
+    }
+    vars
 }
 
 #[tauri::command]
@@ -83,8 +98,12 @@ fn main() {
             }
             _ => {}
         })
-        .invoke_handler(tauri::generate_handler![greet])
-        .invoke_handler(tauri::generate_handler![vainilla_tokenize])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            get_env,
+            get_envs,
+            vainilla_tokenize
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

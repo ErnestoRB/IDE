@@ -16,11 +16,21 @@ import { StatusBar } from "./StatusBar";
 import { loader } from "@monaco-editor/react";
 import { setupVainilla } from "./monaco/vainilla";
 import { AppModal } from "./AppModal";
+import { useTerminalStore } from "./stores/terminal";
+import {
+  getAvailableShells,
+  getDefaultShell,
+  getExecutingShell,
+} from "./terminal/backend";
 loader.init().then(setupVainilla);
 
 function App() {
   const lateralRef = useRef<ImperativePanelHandle>(null);
   const terminalRef = useRef<ImperativePanelHandle>(null);
+  const [setTerminal, setAvailableTerminals] = useTerminalStore((s) => [
+    s.setTerminal,
+    s.setAvailableTerminals,
+  ]);
   const { setLateralPanelRef, setTerminalPanelRef, showNavbar } =
     useLayoutStore();
 
@@ -56,6 +66,11 @@ function App() {
   useEffect(() => {
     setLateralPanelRef(lateralRef.current!);
     setTerminalPanelRef(terminalRef.current!);
+    getDefaultShell().then((v) => setTerminal(v));
+    getAvailableShells().then((v) => {
+      console.log({ v });
+      setAvailableTerminals(v);
+    });
   }, []);
 
   return (
