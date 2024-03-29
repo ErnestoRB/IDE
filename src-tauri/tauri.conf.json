@@ -12,23 +12,6 @@
   "tauri": {
     "allowlist": {
       "all": false,
-      "shell": {
-        "all": false,
-        "open": true,
-        "execute": true,
-        "sidecar": true,
-        "scope": [
-          {
-            "name": "cmd",
-            "cmd": "cmd",
-            "args": ["powershell", "powershell.exe"]
-          },
-          {
-            "name": "sh",
-            "cmd": "sh"
-          }
-        ]
-      },
       "dialog": {
         "all": false,
         "ask": false,

@@ -1,9 +1,17 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use std::env::Vars;
+mod structures;
+mod terminal;
+
+use std::io::{BufRead, BufReader, Read};
+use std::rc::Rc;
+use std::sync::{Arc, Mutex};
+use std::thread::spawn;
 
 use scanner::tokenize;
 use tauri::{CustomMenuItem, Manager, Menu, MenuItem, Submenu};
+use terminal::state::TerminalState;
+use terminal::{create_pty, create_shell, kill_shell, resize_pty, write_pty};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -78,13 +86,35 @@ fn main() {
         .add_submenu(edit_sub)
         .add_submenu(view_menu)
         .add_submenu(build_sub);
+
+    let pty = create_pty().unwrap();
+    let writer = pty.master.take_writer().unwrap();
+    let mut buffer = BufReader::new(pty.master.try_clone_reader().unwrap());
     tauri::Builder::default()
+        .manage(TerminalState {
+            pty: structures::Terminal {
+                master: Mutex::new(pty.master),
+                slave: Mutex::new(pty.slave),
+                writer: Mutex::new(writer),
+            },
+            is_running: Arc::new(Mutex::new(false)),
+            child_killer: Mutex::new(Option::None),
+        })
         .setup(|app| {
             #[cfg(debug_assertions)] // only include this code on debug builds
             {
                 let window = app.get_window("main").unwrap();
                 window.open_devtools();
                 window.close_devtools();
+                spawn(move || {
+                    let mut output = String::new();
+                    loop {
+                        if let Ok(data) = buffer.fill_buf().unwrap().read_to_string(&mut output) {
+                            buffer.consume(data);
+                            let _ = window.emit("tty", output.clone());
+                        }
+                    }
+                });
             }
             Ok(())
         })
@@ -99,6 +129,10 @@ fn main() {
             _ => {}
         })
         .invoke_handler(tauri::generate_handler![
+            create_shell,
+            write_pty,
+            resize_pty,
+            kill_shell,
             greet,
             get_env,
             get_envs,

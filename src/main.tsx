@@ -7,9 +7,7 @@ import "./styles.css";
 import "@fontsource/inter";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <App />
 );
 
 Modal.setAppElement("#root");

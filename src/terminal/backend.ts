@@ -1,4 +1,4 @@
-import { os, process } from "@tauri-apps/api";
+import { invoke, os, process } from "@tauri-apps/api";
 import { Command } from "@tauri-apps/api/shell";
 import { useTerminalStore } from "../stores/terminal";
 import { getEnv, getEnvs } from "../utils/env";
@@ -35,3 +35,19 @@ export function isPrintable(key: string) {
   // Revisa si el código de la tecla está en el rango ASCII imprimible (32-126)
   return key.charCodeAt(0) >= 32 && key.charCodeAt(0) <= 126;
 }
+
+export const createShell = async (): Promise<void> => {
+  return invoke("create_shell");
+};
+
+export const sendDataShell = async (data: string): Promise<void> => {
+  return invoke("write_pty", { text: data });
+};
+
+export const resizePty = async (rows: number, cols: number): Promise<void> => {
+  return invoke("resize_pty", { rows, cols });
+};
+
+export const killShell = async (): Promise<void> => {
+  return invoke("kill_shell", {});
+};
