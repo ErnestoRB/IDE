@@ -3,15 +3,14 @@
 mod structures;
 mod terminal;
 
-use std::io::{BufRead, BufReader, Read};
-use std::rc::Rc;
-use std::sync::{Arc, Mutex};
-use std::thread::spawn;
+use std::collections::HashMap;
+use std::sync::Arc;
 
 use scanner::tokenize;
+use tauri::async_runtime::Mutex as AsyncMutex;
 use tauri::{CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 use terminal::state::TerminalState;
-use terminal::{create_pty, create_shell, kill_shell, resize_pty, write_pty};
+use terminal::{create_shell, get_available_shells, kill_shell, resize_pty, write_tty};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -87,18 +86,10 @@ fn main() {
         .add_submenu(view_menu)
         .add_submenu(build_sub);
 
-    let pty = create_pty().unwrap();
-    let writer = pty.master.take_writer().unwrap();
-    let mut buffer = BufReader::new(pty.master.try_clone_reader().unwrap());
     tauri::Builder::default()
         .manage(TerminalState {
-            pty: structures::Terminal {
-                master: Mutex::new(pty.master),
-                slave: Mutex::new(pty.slave),
-                writer: Mutex::new(writer),
-            },
-            is_running: Arc::new(Mutex::new(false)),
-            child_killer: Mutex::new(Option::None),
+            ptys: Arc::new(AsyncMutex::new(HashMap::new())),
+            created: AsyncMutex::new(0),
         })
         .setup(|app| {
             #[cfg(debug_assertions)] // only include this code on debug builds
@@ -106,15 +97,6 @@ fn main() {
                 let window = app.get_window("main").unwrap();
                 window.open_devtools();
                 window.close_devtools();
-                spawn(move || {
-                    let mut output = String::new();
-                    loop {
-                        if let Ok(data) = buffer.fill_buf().unwrap().read_to_string(&mut output) {
-                            buffer.consume(data);
-                            let _ = window.emit("tty", output.clone());
-                        }
-                    }
-                });
             }
             Ok(())
         })
@@ -129,8 +111,9 @@ fn main() {
             _ => {}
         })
         .invoke_handler(tauri::generate_handler![
+            get_available_shells,
             create_shell,
-            write_pty,
+            write_tty,
             resize_pty,
             kill_shell,
             greet,

@@ -8,7 +8,7 @@ import {
   GoTable,
   GoTerminal,
 } from "react-icons/go";
-import { TerminalComponent } from "./Tabs/Terminal";
+import { TerminalContainer } from "./Tabs/Terminal";
 import { Lexico } from "./Tabs/Lexico";
 import { Sintactico } from "./Tabs/Sintactico";
 import { Semantico } from "./Tabs/Semantico";
@@ -26,7 +26,7 @@ export const Tabs: TabItem[] = [
   {
     name: "Terminal",
     icon: GoTerminal,
-    content: <TerminalComponent></TerminalComponent>,
+    content: <TerminalContainer></TerminalContainer>,
   },
   {
     name: "Lexico",

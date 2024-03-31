@@ -1,121 +1,138 @@
-import { useEffect, useRef, useState } from "react";
-import { createShell, killShell, resizePty, sendDataShell } from "../backend";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { useTerminalStore } from "../../stores/terminal";
-import { Terminal } from "@xterm/xterm";
-import { FitAddon } from "xterm-addon-fit";
-
 import "@xterm/xterm/css/xterm.css";
-import { listen } from "@tauri-apps/api/event";
-import { FaPlus, FaTrash } from "react-icons/fa";
-import useResizeObserver from "use-resize-observer";
+import { ReactNode, useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa";
+import { TerminalComponent } from "../TerminalInstance";
+import { Listbox, Tab } from "@headlessui/react";
+import { GoChevronDown, GoTerminal, GoTrash } from "react-icons/go";
+import { getDefaultShell } from "../backend";
 
-export function TerminalComponent() {
-  const shells = useTerminalStore((s) => s.availableTerminals);
-  const shell = useTerminalStore((s) => s.terminal);
-  const setTerminal = useTerminalStore((s) => s.setTerminal);
-  const terminalDivRef = useRef<HTMLDivElement>(null!);
-  const fitAddonRef = useRef<FitAddon | undefined>(undefined);
-  const terminalRef = useRef<Terminal | undefined>(undefined);
-  const [created, setCreated] = useState(false);
+interface ITerminalItem {
+  shell: string;
+  component: ReactNode;
+}
 
-  const { height, ref, width } = useResizeObserver<HTMLDivElement>();
-
-  const onTerminalKill = (code: number) => {
-    setCreated(false);
-    terminalRef.current?.clear();
-    terminalRef.current?.writeln(
-      `Terminal terminado con código ${code}, inicia otra terminal`
-    );
-    console.log("Terminated");
-  };
+export function TerminalContainer() {
+  const [terminal, setTerminal] = useTerminalStore((s) => [
+    s.terminal,
+    s.setTerminal,
+  ]);
+  const avaialbeTerminals = useTerminalStore((s) => s.availableTerminals);
+  const [terminals, setTerminals] = useState<ITerminalItem[]>([]);
 
   useEffect(() => {
-    if (width && height) {
-      if (fitAddonRef.current) {
-        fitAddonRef.current?.fit();
-        resizePty(terminalRef.current!.rows, terminalRef.current!.cols);
-      }
-    }
-  }, [width, height]);
-
-  useEffect(() => {
-    createShell()
-      .then(() => console.log("Terminal creada con exito"))
-      .finally(() => setCreated(true));
-  }, []);
-
-  useEffect(() => {
-    if (created) {
-      terminalRef.current?.clear();
-      const ttyListenPromise = listen("tty", (e) =>
-        terminalRef.current?.write(e.payload as string)
-      );
-      const shellExitPromise = listen("shell-exit", (e) =>
-        onTerminalKill(e.payload as number)
-      );
-      return () => {
-        ttyListenPromise.then((u) => u());
-        shellExitPromise.then((u) => u());
-      };
-    }
-  }, [created]);
-
-  useEffect(() => {
-    console.log("Creando xterm");
-    const term = new Terminal({ cols: 80, rows: 24 });
-    const fitAddon = new FitAddon();
-    fitAddonRef.current = fitAddon;
-    term.loadAddon(fitAddon);
-    terminalRef.current = term;
-    term.open(terminalDivRef.current!);
-    // Aquí puedes configurar el terminal, por ejemplo, temas, tamaño de fuente, etc.
-    // Consulta la documentación de xterm.js para más detalles: https://xtermjs.org/docs/api/terminal/
-    term.onData(sendDataShell);
-
-    fitAddon.fit();
-    resizePty(term.rows, term.cols);
-    return () => {
-      term.dispose();
-    };
+    getDefaultShell().then((s) => {
+      setTerminal(s);
+      setTerminals((t) => [
+        ...t,
+        {
+          shell: s,
+          component: <TerminalComponent shell={s}></TerminalComponent>,
+        },
+      ]);
+    });
   }, []);
 
   return (
-    <div className=" text-white w-full bg-stone-800 h-full flex flex-col justify-end overflow-y-auto overflow-x-hidden ">
-      <div className="p-2">
-        Shells disponibles
-        <select
-          className="mx-2 text-black"
-          onChange={(s) => setTerminal(s.currentTarget.value)}
+    <Tab.Group>
+      <div className=" text-white w-full bg-stone-800 h-full flex flex-col justify-end overflow-y-auto overflow-x-hidden ">
+        <div
+          id="terminal-select"
+          className="h-10 flex flex-shrink-0 items-center gap-x-2 px-2"
         >
-          {shells?.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
-        {!created && (
+          Shells disponibles:{" "}
+          <div className="relative">
+            <Listbox value={terminal} onChange={setTerminal}>
+              <Listbox.Button className="flex items-center p-2 bg-stone-900 rounded-sm">
+                {terminal}
+                <GoChevronDown></GoChevronDown>
+              </Listbox.Button>
+              <Listbox.Options className="absolute z-10 bg-stone-800 backdrop-opacity-60 backdrop-blur-sm">
+                {avaialbeTerminals?.map((shell, i) => (
+                  <Listbox.Option
+                    className="px-2 py-1 hover:bg-stone-700 ui-selected:border-l-2  ui-not-selected:border-none border-white"
+                    key={i}
+                    value={shell}
+                  >
+                    {shell}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </Listbox>
+          </div>
           <button
             onClick={() => {
-              createShell()
-                .then(() => console.log("Terminal creada  con exito"))
-                .finally(() => setCreated(true));
+              const terminalItem = {
+                shell: terminal!,
+                component: (
+                  <TerminalComponent shell={terminal!}></TerminalComponent>
+                ),
+              };
+
+              setTerminals((t) => [...t, terminalItem]);
             }}
           >
             <FaPlus></FaPlus>
           </button>
-        )}
-        <button
-          className=""
-          onClick={() => {
-            killShell().then(() => console.log("Sent kill signal"));
-          }}
+        </div>
+        <PanelGroup
+          className="w-full"
+          autoSaveId="terminal"
+          direction="horizontal"
         >
-          <FaTrash></FaTrash>
-        </button>
+          <Panel minSize={50}>
+            <Tab.Panels className="w-full h-full flex flex-1 overflow-clip">
+              {terminals.map(({ component }, i) => (
+                <Tab.Panel
+                  unmount={false}
+                  key={i}
+                  className="w-full overflow-y-auto bg-white"
+                >
+                  {component}
+                </Tab.Panel>
+              ))}
+            </Tab.Panels>
+          </Panel>
+          <PanelResizeHandle />
+          <Panel minSize={10} maxSize={20}>
+            <Tab.List
+              as={"div"}
+              className="flex flex-col overflow-y-auto bg-stone-900 text-white flex-shrink-0 h-full"
+            >
+              {terminals.map(({ shell }, i) => (
+                <Tab
+                  as="div"
+                  key={i}
+                  className="text-sm flex flex-grow-0 max-h-full px-2 py-1 ui-not-selected:border-none ui-selected:border-l-2 transition-all ui-selected:border-white"
+                >
+                  <div className="flex items-center gap-x-2 w-max h-full">
+                    <GoTerminal></GoTerminal>
+                    <span>{shell}</span>
+                    <button
+                      onClick={() => {
+                        console.log(`Killing terminal ${i}`);
+
+                        setTerminals((t) => {
+                          t.splice(i, 1);
+                          return [...t];
+                        });
+                      }}
+                    >
+                      <GoTrash></GoTrash>
+                    </button>
+                  </div>
+                </Tab>
+              ))}
+              {terminals.length == 0 && (
+                <span className="text-xs text-center mt-2">
+                  No hay terminales disponibles
+                </span>
+              )}
+            </Tab.List>
+          </Panel>
+        </PanelGroup>
       </div>
-      <div className="flex-1 overflow-hidden" ref={ref}>
-        <div className="w-full h-full overflow-y-hidden" ref={terminalDivRef} />
-      </div>
-    </div>
+    </Tab.Group>
   );
 }

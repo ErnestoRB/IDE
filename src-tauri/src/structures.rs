@@ -1,8 +1,10 @@
-use std::{io::Write, sync::Mutex};
+use std::io::Write;
+use tauri::async_runtime::Mutex as AsyncMutex;
 
-use portable_pty::{MasterPty, SlavePty};
+use portable_pty::{ChildKiller, MasterPty, SlavePty};
 pub struct Terminal {
-    pub slave: Mutex<Box<dyn SlavePty + Send>>,
-    pub master: Mutex<Box<dyn MasterPty + Send>>,
-    pub writer: Mutex<Box<dyn Write + Send>>,
+    pub slave: AsyncMutex<Box<dyn SlavePty + Send>>,
+    pub master: AsyncMutex<Box<dyn MasterPty + Send>>,
+    pub writer: AsyncMutex<Box<dyn Write + Send>>,
+    pub killer: AsyncMutex<Box<dyn ChildKiller + Send + Sync>>,
 }

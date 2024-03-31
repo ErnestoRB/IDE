@@ -1,11 +1,9 @@
-use std::sync::{Arc, Mutex};
-
-use portable_pty::{Child, ChildKiller};
+use std::{collections::HashMap, sync::Arc};
 
 use crate::structures::Terminal;
+use tauri::async_runtime::Mutex as AsyncMutex;
 
 pub struct TerminalState {
-    pub pty: Terminal,
-    pub is_running: Arc<Mutex<bool>>,
-    pub child_killer: Mutex<Option<Box<dyn ChildKiller + Send + Sync>>>,
+    pub ptys: Arc<AsyncMutex<HashMap<u8, Terminal>>>,
+    pub created: AsyncMutex<u8>,
 }
