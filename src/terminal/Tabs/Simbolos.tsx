@@ -7,7 +7,7 @@ export function Simbolos() {
   return (
     <div className="px-4 pt-2 w-full h-full bg-stone-900 text-white grid overflow-y-auto overflow-x-hidden">
       {lexicoResult && lexicoResult[0] && lexicoResult[0].length > 0 ? (
-        <table className="table-auto">
+        <table className="h-max">
           <thead>
             <tr className="border-b border-b-gray-400">
               <th>Tipo de Token</th>
