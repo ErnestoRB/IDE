@@ -143,12 +143,12 @@ pub async fn create_shell(
             let alive_writer = alive.clone();
             spawn(move || {
                 // reader
-                let mut buffer: Vec<u8> = vec![0u8; 1];
+                let mut buffer: Vec<u8> = vec![0u8; 1024];
                 let event = format!("tty-{}", id);
 
                 while *alive.read().unwrap() {
-                    if let Ok(_) = reader.read_exact(&mut buffer) {
-                        match from_utf8(&buffer) {
+                    if let Ok(bytes) = reader.read(&mut buffer) {
+                        match from_utf8(&buffer[0..bytes]) {
                             Ok(text) => {
                                 println!("Data {} sent", text);
                                 let _ = app_handle.clone().emit_all(&event, text);
