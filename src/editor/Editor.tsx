@@ -81,10 +81,10 @@ export function Editor() {
               editor.getModel()!,
               "",
               v[1].map((v) => ({
-                endColumn: v.position.col,
-                startColumn: v.position.col,
-                startLineNumber: v.position.lin,
-                endLineNumber: v.position.lin,
+                endColumn: v.end.col,
+                startColumn: v.start.col,
+                startLineNumber: v.start.lin,
+                endLineNumber: v.end.lin,
                 message: v.message,
                 severity: monaco.MarkerSeverity.Error,
               }))

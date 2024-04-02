@@ -4,7 +4,17 @@ import { languages } from "monaco-editor";
 export const VAINILLA_ID = { id: "vanilla-lang" };
 
 const VAINILLA_LANG: languages.IMonarchLanguage = {
-  keywords: ["if", "else", "do", "switch", "while", "case", "main"],
+  keywords: [
+    "if",
+    "else",
+    "do",
+    "switch",
+    "while",
+    "case",
+    "main",
+    "stdin",
+    "stdout",
+  ],
   typeKeywords: ["double", "integer"],
   arithmeticOp: [
     "+", // artitmeticos
@@ -13,6 +23,8 @@ const VAINILLA_LANG: languages.IMonarchLanguage = {
     "/",
     "^",
     "%",
+    "++",
+    "--",
   ],
   relationalOp: [
     ">", // relacionales
@@ -55,7 +67,7 @@ const VAINILLA_LANG: languages.IMonarchLanguage = {
         },
       ],
       // whitespace
-      [/[+-]*\d*\.\d+/, "number.float"], //tokenizar numeros
+      [/[+-]*\d+\.\d+/, "number.float"], //tokenizar numeros
       [/\d+/, "number"],
     ],
     comment: [

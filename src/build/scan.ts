@@ -11,7 +11,8 @@ interface Cursor {
 }
 
 interface ScanError {
-  position: Cursor;
+  start: Cursor;
+  end: Cursor;
   message: string;
   lexemme: string;
 }

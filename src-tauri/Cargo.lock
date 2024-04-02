@@ -2332,7 +2332,7 @@ dependencies = [
 [[package]]
 name = "scanner"
 version = "0.1.0"
-source = "git+https://github.com/ErnestoRB/Scanner.git#2aed68dabf7c13a3790ad7920f1d1158bc822c2c"
+source = "git+https://github.com/ErnestoRB/Scanner.git#1d40e0288ca0430de0d01a4793ed5cfbb4df6c08"
 dependencies = [
  "clap",
  "phf 0.11.2",

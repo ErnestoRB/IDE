@@ -9,10 +9,11 @@ export function Errores() {
         <div>
           {lexicoResult[1].map((error, index) => (
             <div key={index} className="text-red-400">
-              <p>Error en el lexema '{error.lexemme}'</p>
-              <p>{error.message}</p>
               <p>
-                En linea {error.position.lin}, columna {error.position.col}
+                Error en el lexema '{error.lexemme}': {error.message}
+              </p>
+              <p>
+                En linea {error.start.lin}, columna {error.start.col}
               </p>
               <br />
             </div>
