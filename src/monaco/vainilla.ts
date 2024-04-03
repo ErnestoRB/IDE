@@ -114,22 +114,34 @@ export function setupVainilla(monaco: ReturnType<typeof useMonaco>) {
     inherit: false,
     colors: {
       "editor.foreground": "#ABB2BF",
-      "editor.background": "#282C34",
+      "editor.background": "#212337",
       "editor.selectionBackground": "#3E4451",
       "editor.lineHighlightBackground": "#2C313A",
       "editorCursor.foreground": "#528BFF",
       "editorWhitespace.foreground": "#3B4048",
     },
     rules: [
-      { token: "keyword", foreground: "ff9d00", fontStyle: "bold" },
-      { token: "typeKeyword", foreground: "ff9d00", fontStyle: "bold" },
-      { token: "comment", foreground: "5c6370" },
-      { token: "number", foreground: "3db0a5" },
-      { token: "identifier", foreground: "dcdcaa" },
-      { token: "arithmeticOp", foreground: "dcdcaa" },
-      { token: "relationalOp", foreground: "dcdcaa" },
-      { token: "logicalOp", foreground: "dcdcaa" },
-      { token: "assignment", foreground: "3db0a5" },
+      { token: "keyword", foreground: "c099ff", fontStyle: "bold" }, 
+      { token: "typeKeyword", foreground: "c099ff", fontStyle: "bold" },
+      { token: "comment", foreground: "8a91d1" }, 
+      { token: "number", foreground: "ff98a4" }, 
+      { token: "identifier", foreground: "a5d7e8" }, 
+      {
+        token: "arithmeticOp", 
+        foreground: "f2f7a1",
+      },
+      {
+        token: "relationalOp",
+        foreground: "f73d93",
+      },
+      {
+        token: "logicalOp",
+        foreground: "e2703a",
+      },
+      {
+        token: "assignment",
+        foreground: "ffffff",
+      },
     ],
   });
 
