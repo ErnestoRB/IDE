@@ -128,7 +128,7 @@ export function setupVainilla(monaco: ReturnType<typeof useMonaco>) {
       { token: "identifier", foreground: "a5d7e8" }, 
       {
         token: "arithmeticOp", 
-        foreground: "f2f7a1",
+        foreground: "f0f777",
       },
       {
         token: "relationalOp",
