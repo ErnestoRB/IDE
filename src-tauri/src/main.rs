@@ -1,12 +1,34 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+mod structures;
+mod terminal;
+
+use std::collections::HashMap;
+use std::sync::Arc;
+
 use scanner::tokenize;
+use tauri::async_runtime::Mutex as AsyncMutex;
 use tauri::{CustomMenuItem, Manager, Menu, MenuItem, Submenu};
+use terminal::state::TerminalState;
+use terminal::{create_shell, get_available_shells, kill_shell, resize_pty, write_tty};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
+}
+
+#[tauri::command]
+fn get_env(name: &str) -> String {
+    std::env::var(String::from(name)).unwrap_or(String::from(""))
+}
+#[tauri::command]
+fn get_envs() -> Vec<(String, String)> {
+    let mut vars: Vec<(String, String)> = vec![];
+    for (key, value) in std::env::vars() {
+        vars.push((key, value));
+    }
+    vars
 }
 
 #[tauri::command]
@@ -63,7 +85,12 @@ fn main() {
         .add_submenu(edit_sub)
         .add_submenu(view_menu)
         .add_submenu(build_sub);
+
     tauri::Builder::default()
+        .manage(TerminalState {
+            ptys: Arc::new(AsyncMutex::new(HashMap::new())),
+            created: AsyncMutex::new(0),
+        })
         .setup(|app| {
             #[cfg(debug_assertions)] // only include this code on debug builds
             {
@@ -83,8 +110,17 @@ fn main() {
             }
             _ => {}
         })
-        .invoke_handler(tauri::generate_handler![greet])
-        .invoke_handler(tauri::generate_handler![vainilla_tokenize])
+        .invoke_handler(tauri::generate_handler![
+            get_available_shells,
+            create_shell,
+            write_tty,
+            resize_pty,
+            kill_shell,
+            greet,
+            get_env,
+            get_envs,
+            vainilla_tokenize
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

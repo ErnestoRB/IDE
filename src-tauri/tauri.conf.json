@@ -12,10 +12,6 @@
   "tauri": {
     "allowlist": {
       "all": false,
-      "shell": {
-        "all": false,
-        "open": true
-      },
       "dialog": {
         "all": false,
         "ask": false,
@@ -38,6 +34,9 @@
         "writeFile": false
       },
       "path": {
+        "all": true
+      },
+      "os": {
         "all": true
       }
     },
