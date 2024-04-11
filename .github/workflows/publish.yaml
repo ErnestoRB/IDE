@@ -29,9 +29,9 @@ jobs:
           token: ${{ secrets.GH_PAT }}
       - name: Set github url and credentials
         run: |
-          /usr/bin/git config --global --add url."https://${{ secrets.GH_PAT }}:x-oauth-basic@github".insteadOf ssh://git@github
-          /usr/bin/git config --global --add url."https://${{ secrets.GH_PAT }}:x-oauth-basic@github".insteadOf https://github
-          /usr/bin/git config --global --add url."https://${{ secrets.GH_PAT }}:x-oauth-basic@github".insteadOf git@github
+          git config --global --add url."https://${{ secrets.GH_PAT }}:x-oauth-basic@github".insteadOf ssh://git@github
+          git config --global --add url."https://${{ secrets.GH_PAT }}:x-oauth-basic@github".insteadOf https://github
+          git config --global --add url."https://${{ secrets.GH_PAT }}:x-oauth-basic@github".insteadOf git@github
       - name: install dependencies (ubuntu only)
         if: matrix.settings.platform == 'ubuntu-22.04' # This must match the platform value defined above.
         run: |
@@ -65,9 +65,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
         with:
-          tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          releaseName: "App v__VERSION__"
-          releaseBody: "See the assets to download this version and install."
-          releaseDraft: true
-          prerelease: false
           args: ${{ matrix.settings.args }}
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ide-${{ github.sha }}-${{ matrix.settings.plataform }}
+          path: target
