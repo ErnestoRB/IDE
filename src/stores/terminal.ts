@@ -7,7 +7,7 @@ interface ITerminalStore {
   setAvailableTerminals: (terminals: string[]) => any;
 }
 
-export const useTerminalStore = create<ITerminalStore>((set, get) => ({
+export const useTerminalStore = create<ITerminalStore>((set) => ({
   terminal: undefined,
   availableTerminals: undefined,
   setTerminal: (terminal: string) => set({ terminal }),

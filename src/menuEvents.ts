@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { appWindow } from "@tauri-apps/api/window";
 import { open, save } from "@tauri-apps/api/dialog";
 import { fs, path } from "@tauri-apps/api";
@@ -67,8 +66,10 @@ export const closeFile = async () => {
 
 export const lexico = async () => {
   try {
-    const result = await scanFile(useEditor.getState().editor?.getValue() ?? "");
-    useFileStore.setState({ lexicoResult : result });
+    const result = await scanFile(
+      useEditor.getState().editor?.getValue() ?? ""
+    );
+    useFileStore.setState({ lexicoResult: result });
   } catch (error) {
     console.error(error);
   }

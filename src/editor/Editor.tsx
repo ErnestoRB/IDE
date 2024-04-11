@@ -68,7 +68,7 @@ export function Editor() {
         defaultLanguage={VAINILLA_ID.id}
         defaultValue="// Example"
         theme={theme}
-        onMount={(editor, monaco) => {
+        onMount={(editor) => {
           setEditor(editor);
           setMounted(true);
         }}

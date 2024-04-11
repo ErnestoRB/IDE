@@ -133,13 +133,13 @@ export function setupVainilla(monaco: ReturnType<typeof useMonaco>) {
       "editorWhitespace.foreground": "#3B4048",
     },
     rules: [
-      { token: "keyword", foreground: "c099ff", fontStyle: "bold" }, 
+      { token: "keyword", foreground: "c099ff", fontStyle: "bold" },
       { token: "typeKeyword", foreground: "c099ff", fontStyle: "bold" },
-      { token: "comment", foreground: "8a91d1" }, 
-      { token: "number", foreground: "ff98a4" }, 
-      { token: "identifier", foreground: "a5d7e8" }, 
+      { token: "comment", foreground: "8a91d1" },
+      { token: "number", foreground: "ff98a4" },
+      { token: "identifier", foreground: "a5d7e8" },
       {
-        token: "arithmeticOp", 
+        token: "arithmeticOp",
         foreground: "f0f777",
       },
       {
@@ -158,7 +158,7 @@ export function setupVainilla(monaco: ReturnType<typeof useMonaco>) {
   });
 
   monaco?.languages.registerCompletionItemProvider(VAINILLA_ID.id, {
-    provideCompletionItems: (model, position) => {
+    provideCompletionItems: () => {
       const suggestions = [
         ...VAINILLA_LANG.keywords.map((k: string) => {
           return {
