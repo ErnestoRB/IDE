@@ -6,6 +6,7 @@ import { writeTextFile } from "@tauri-apps/api/fs";
 import { useEditor } from "./stores/editor";
 import { useLayoutStore } from "./stores/layout";
 import { scanFile } from "./build/scan";
+import { parseFile } from "./build/parse";
 
 export const openEditorFile = async () => {
   // Open a selection dialog for image files
@@ -75,6 +76,18 @@ export const lexico = async () => {
   }
 };
 
+export const sintactico = async () => {
+  try {
+    const result = await parseFile(
+      useEditor.getState().editor?.getValue() ?? ""
+    );
+    console.log(result);
+    useFileStore.setState({ sintacticoResult: result });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 //@ts-ignore
 if (window.__TAURI_IPC__) {
   appWindow.onMenuClicked(async ({ payload: menuId }) => {
@@ -96,6 +109,9 @@ if (window.__TAURI_IPC__) {
         break;
       case "lexico":
         await lexico();
+        break;
+      case "sintactico":
+        await sintactico();
         break;
     }
   });

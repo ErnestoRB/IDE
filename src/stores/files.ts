@@ -13,6 +13,7 @@ interface IFileStore {
   activeFile?: IFileContent;
   setActiveFile: (file: IFileContent) => unknown;
   lexicoResult: ScanOutput | null;
+  sintacticoResult: any;
   setLexicoResult: (output: ScanOutput | null) => any;
 }
 
@@ -24,6 +25,7 @@ export const useFileStore = create<IFileStore>()(
       setFiles: (files) => set({ files }),
       setActiveFile: (file) => set({ activeFile: file }),
       lexicoResult: null,
+      sintacticoResult: null,
       setLexicoResult: (output: ScanOutput | null) =>
         set({ lexicoResult: output }),
     }),
