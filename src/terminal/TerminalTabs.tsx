@@ -10,7 +10,7 @@ import {
 } from "react-icons/go";
 import { TerminalContainer } from "./Tabs/Terminal";
 import { Lexico } from "./Tabs/Lexico";
-import { Sintactico } from "./Tabs/Sintactico";
+import { Sintactico } from "./Tabs/Sintactico/Sintactico";
 import { Semantico } from "./Tabs/Semantico";
 import { Intermedio } from "./Tabs/Intermedio";
 import { Errores } from "./Tabs/Errores";
