@@ -1,5 +1,6 @@
 import { TreeItem } from "@mui/x-tree-view/TreeItem";
 import { v4 as uuidv4 } from "uuid";
+import { TreeNode } from "./TreeNode";
 export function Node({ node }: any) {
   /* if (node.Decl) {
     return (
@@ -19,23 +20,39 @@ export function Node({ node }: any) {
     return null;
   }
 
+  if (node.sibling) {
+    return <TreeNode node={node.sibling}></TreeNode>;
+  }
+
   let nodeKeys = Object.keys(node);
   return (
-    <TreeItem itemId={uuidv4()} label={nodeKeys[0]}>
-      <div className="flex">
-        {nodeKeys.map((key) => {
-          let value = node[key];
-          if (typeof value == "object") {
-            return <Node node={value}></Node>;
+    <>
+      {nodeKeys.map((key) => {
+        let value = node[key];
+        if (key == "children") return null;
+        if (typeof value == "object") {
+          if (!value) {
+            return null;
+          }
+
+          if (value.sibling) {
+            return <TreeNode node={value.sibling}></TreeNode>;
           }
           return (
+            <TreeItem itemId={uuidv4()} label={key}>
+              <Node key={key} node={value}></Node>
+            </TreeItem>
+          );
+        }
+        return (
+          <div className="flex">
             <p key={key}>
               {key}: {value}
             </p>
-          );
-        })}
-      </div>
-    </TreeItem>
+          </div>
+        );
+      })}
+    </>
   );
 
   //  return <div className="border-2 border-black">{JSON.stringify(node)}</div>;
