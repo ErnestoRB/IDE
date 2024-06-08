@@ -6,12 +6,14 @@ import { useFileStore } from "../stores/files";
 import { VAINILLA_ID } from "../monaco/vainilla";
 import { scanFile } from "../build/scan";
 import { setupEditorCommands } from "./setup";
+import { parseFile } from "../build/parse";
 
 export function Editor() {
   const { terminalPanelRef, lateralPanelRef } = useLayoutStore();
   const { editor, setEditor, setCursor } = useEditor();
   const { activeFile } = useFileStore();
   const setLexicoResult = useFileStore((s) => s.setLexicoResult);
+  const setSintacticoResult = useFileStore((s) => s.setSintacticoResult);
 
   const theme = useEditor((s) => s.theme);
   const monaco = useMonaco();
@@ -89,6 +91,24 @@ export function Editor() {
                 severity: monaco.MarkerSeverity.Error,
               }))
             );
+          });
+          parseFile(str).then((v) => {
+            console.log({ v });
+            setSintacticoResult(v);
+            if (v[1].Parse) {
+              monaco.editor.setModelMarkers(
+                editor.getModel()!,
+                "",
+                v[1].Parse.map((v) => ({
+                  endColumn: v.current_token.end.col,
+                  startColumn: v.current_token.start.col,
+                  startLineNumber: v.current_token.start.lin,
+                  endLineNumber: v.current_token.end.lin,
+                  message: v.message,
+                  severity: monaco.MarkerSeverity.Error,
+                }))
+              );
+            }
           });
         }}
       />

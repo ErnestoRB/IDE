@@ -15,5 +15,5 @@ pub struct Terminal {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 pub enum CompilationError {
     Scan(Vec<ScanError>),
-    Parse(ParseError),
+    Parse(Vec<ParseError>),
 }

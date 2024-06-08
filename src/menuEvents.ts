@@ -85,7 +85,6 @@ export const sintactico = async () => {
     useFileStore.setState({ sintacticoResult: result });
   } catch (error) {
     console.error(error);
-    useFileStore.setState({ sintacticoError: error });
   }
 };
 

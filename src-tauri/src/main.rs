@@ -40,12 +40,13 @@ fn vainilla_tokenize(contents: String) -> (Vec<scanner::data::Token>, Vec<scanne
 }
 
 #[tauri::command]
-fn vainilla_parse(contents: String) -> Result<Option<TreeNode>, CompilationError> {
+fn vainilla_parse(contents: String) -> (Option<TreeNode>, CompilationError) {
     let tokens = tokenize(&contents[..]);
     if tokens.1.len() > 0 {
-        return Err(CompilationError::Scan(tokens.1));
+        return (None, CompilationError::Scan(tokens.1));
     }
-    parse(tokens.0).map_err(|e| CompilationError::Parse(e))
+    let tree = parse(tokens.0);
+    (tree.0, CompilationError::Parse(tree.1))
 }
 
 fn main() {

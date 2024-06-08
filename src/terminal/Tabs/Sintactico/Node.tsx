@@ -36,17 +36,17 @@ export function Node({ node }: any) {
           }
 
           if (value.sibling) {
-            return <TreeNode node={value.sibling}></TreeNode>;
+            return <TreeNode key={key} node={value.sibling}></TreeNode>;
           }
           return (
-            <TreeItem itemId={uuidv4()} label={key}>
-              <Node key={key} node={value}></Node>
+            <TreeItem key={key} itemId={uuidv4()} label={key}>
+              <Node node={value}></Node>
             </TreeItem>
           );
         }
         return (
-          <div className="flex">
-            <p key={key}>
+          <div className="flex" key={key}>
+            <p>
               {key}: {value}
             </p>
           </div>
