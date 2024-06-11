@@ -7,8 +7,8 @@ export function TreeNode({ node }: any) {
 
   return (
     <>
-      <Node node={node.node}></Node>
-      {node.sibling && <TreeNode node={node.sibling}></TreeNode>}
+      <Node node={node.node} />
+      {node.sibling && <TreeNode node={node.sibling} />}
     </>
   );
 }
