@@ -1,6 +1,7 @@
+import { TreeNode as ITreeNode } from "../../../build/parse";
 import { Node } from "./Node";
 
-export function TreeNode({ node }: any) {
+export function TreeNode({ node }: { node: ITreeNode }) {
   if (!node) {
     return null;
   }

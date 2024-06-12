@@ -14,7 +14,7 @@ interface CompilationError {
   Scan?: ScanError[];
 }
 
-interface TreeNode {
+export interface TreeNode {
   children: TreeNode[];
   sibling: Option<TreeNode>;
   node: Node;
@@ -83,7 +83,7 @@ type ExpKind =
 
 type ExpType = "Void" | "Integer" | "Boolean";
 
-type Node =
+export type Node =
   | { Stmt: StmtKind }
   | { Exp: { kind: ExpKind; typ: ExpType } }
   | { Decl: DeclKind };
