@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { IFileItem } from "../side/content/FileHierachy";
 import { persist } from "zustand/middleware";
 import { ScanOutput } from "../build/scan";
+import { ParseOutput } from "../build/parse";
 
 export type IFileContent = IFileItem & {
   content: string;
@@ -13,9 +14,9 @@ interface IFileStore {
   activeFile?: IFileContent;
   setActiveFile: (file: IFileContent) => unknown;
   lexicoResult: ScanOutput | null;
-  sintacticoResult: any;
+  sintacticoResult: ParseOutput | null;
   setLexicoResult: (output: ScanOutput | null) => any;
-  setSintacticoResult: (output: any) => any;
+  setSintacticoResult: (output: ParseOutput | null) => any;
 }
 
 export const useFileStore = create<IFileStore>()(

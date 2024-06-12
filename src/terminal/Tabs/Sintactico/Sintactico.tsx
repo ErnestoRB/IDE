@@ -9,7 +9,7 @@ export function Sintactico() {
     return <div>Error de parsing</div>;
   } */
 
-  if (!sintacticoResult[0]) {
+  if (!sintacticoResult || !sintacticoResult[0]) {
     return <div>No se formó ningun arbol sintáctico</div>;
   }
 

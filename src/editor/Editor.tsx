@@ -99,11 +99,11 @@ export function Editor() {
               monaco.editor.setModelMarkers(
                 editor.getModel()!,
                 "",
-                v[1].Parse.map((v) => ({
-                  endColumn: v.current_token.end.col,
-                  startColumn: v.current_token.start.col,
-                  startLineNumber: v.current_token.start.lin,
-                  endLineNumber: v.current_token.end.lin,
+                v[1].Parse.filter((v) => !!v.current_token).map((v) => ({
+                  endColumn: v.current_token!.end.col,
+                  startColumn: v.current_token!.start.col,
+                  startLineNumber: v.current_token!.start.lin,
+                  endLineNumber: v.current_token!.end.lin,
                   message: v.message,
                   severity: monaco.MarkerSeverity.Error,
                 }))

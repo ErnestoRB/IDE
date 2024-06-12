@@ -23,7 +23,8 @@ export function Errores() {
       )}
       {sintacticoResult &&
         sintacticoResult[1] &&
-        sintacticoResult[1].Parse?.length > 0 && (
+        sintacticoResult[1].Parse &&
+        sintacticoResult[1].Parse.length > 0 && (
           <div>
             {sintacticoResult[1].Parse.map((error, index) => (
               <div key={index} className="text-red-400">
