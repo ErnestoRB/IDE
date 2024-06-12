@@ -70,4 +70,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ide-${{ github.sha }}-${{ matrix.settings.platform }}
-          path: src-tauri/target
+          path: src-tauri/target/release/bundle
