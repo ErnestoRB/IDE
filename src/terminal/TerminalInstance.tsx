@@ -32,7 +32,7 @@ export function TerminalComponent({ shell }: { shell: string }) {
   useEffect(() => {
     if (width && height) {
       if (fitAddonRef.current) {
-        fitAddonRef.current?.fit();
+        fitAddonRef.current.fit();
         if (ttyObj.current?.killed) return;
         ttyObj.current?.funcs.resizePty(
           terminalRef.current!.rows,
@@ -103,7 +103,10 @@ export function TerminalComponent({ shell }: { shell: string }) {
 
   return (
     <div className="flex-1 w-full h-full overflow-hidden" ref={ref}>
-      <div className="w-full h-full overflow-y-hidden" ref={terminalDivRef} />
+      <div
+        className="bg-black w-full h-full overflow-y-hidden p-0 m-0"
+        ref={terminalDivRef}
+      />
     </div>
   );
 }

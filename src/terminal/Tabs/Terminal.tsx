@@ -48,7 +48,7 @@ export function TerminalContainer() {
                 {terminal}
                 <GoChevronDown></GoChevronDown>
               </Listbox.Button>
-              <Listbox.Options className="absolute z-10 bg-stone-800 backdrop-opacity-60 backdrop-blur-sm">
+              <Listbox.Options className="absolute z-10 bg-stone-800 backdrop-opacity-60 backdrop-blur-sm h-24 overflow-auto">
                 {avaialbeTerminals?.map((shell, i) => (
                   <Listbox.Option
                     className="px-2 py-1 hover:bg-stone-700 ui-selected:border-l-2  ui-not-selected:border-none border-white"
