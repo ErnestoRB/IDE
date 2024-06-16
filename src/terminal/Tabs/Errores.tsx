@@ -31,7 +31,7 @@ export function Errores() {
                 <p>
                   Error sintactico: {error.message}{" "}
                   {error.current_token
-                    ? `En el token: ${error.current_token}`
+                    ? `En el token: ${error.current_token.token_type}`
                     : ``}
                 </p>
                 <br />
