@@ -6,7 +6,10 @@ mod terminal;
 use std::collections::HashMap;
 use std::sync::Arc;
 
+use parser::parse;
+use parser::structures::TreeNode;
 use scanner::tokenize;
+use structures::CompilationError;
 use tauri::async_runtime::Mutex as AsyncMutex;
 use tauri::{CustomMenuItem, Manager, Menu, MenuItem, Submenu};
 use terminal::state::TerminalState;
@@ -34,6 +37,16 @@ fn get_envs() -> Vec<(String, String)> {
 #[tauri::command]
 fn vainilla_tokenize(contents: String) -> (Vec<scanner::data::Token>, Vec<scanner::data::Error>) {
     tokenize(&contents[..])
+}
+
+#[tauri::command]
+fn vainilla_parse(contents: String) -> (Option<TreeNode>, CompilationError) {
+    let tokens = tokenize(&contents[..]);
+    if tokens.1.len() > 0 {
+        return (None, CompilationError::Scan(tokens.1));
+    }
+    let tree = parse(tokens.0);
+    (tree.0, CompilationError::Parse(tree.1))
 }
 
 fn main() {
@@ -119,7 +132,8 @@ fn main() {
             greet,
             get_env,
             get_envs,
-            vainilla_tokenize
+            vainilla_tokenize,
+            vainilla_parse
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

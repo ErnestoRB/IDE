@@ -1,8 +1,10 @@
 import { invoke } from "@tauri-apps/api";
 
-interface Token {
+export interface Token {
   token_type: string;
   lexemme: string;
+  start: Cursor;
+  end: Cursor;
 }
 
 interface Cursor {
@@ -10,7 +12,7 @@ interface Cursor {
   lin: number;
 }
 
-interface ScanError {
+export interface ScanError {
   start: Cursor;
   end: Cursor;
   message: string;

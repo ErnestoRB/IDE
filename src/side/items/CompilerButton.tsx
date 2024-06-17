@@ -4,7 +4,7 @@ import { BsAlphabetUppercase } from "react-icons/bs";
 import { MdMenuBook } from "react-icons/md";
 import { BsGear } from "react-icons/bs";
 import { GoChevronDown } from "react-icons/go";
-import { lexico } from "../../menuEvents";
+import { lexico, sintactico } from "../../menuEvents";
 
 export function CompilerButton() {
   return (
@@ -19,13 +19,26 @@ export function CompilerButton() {
         <Menu.Items className="absolute top-10 left-0 z-10 grid gap-2 justify-center place-items-center text-white bg-stone-900">
           <Menu.Item>
             {({ active }) => (
-              <a
+              <button
+                onClick={lexico}
+                className={`${
+                  active && "hover:bg-black"
+                } w-full h-full px-3 py-2 gap-4 place-items-center flex justify-between`}
+              >
+                Léxico <BsAlphabetUppercase />
+              </button>
+            )}
+          </Menu.Item>{" "}
+          <Menu.Item>
+            {({ active }) => (
+              <button
+                onClick={sintactico}
                 className={`${
                   active && "hover:bg-black"
                 } w-full h-full px-3 py-2 gap-4 place-items-center flex justify-between`}
               >
                 Sintático <BsGear />
-              </a>
+              </button>
             )}
           </Menu.Item>
           <Menu.Item>
@@ -39,18 +52,6 @@ export function CompilerButton() {
               </a>
             )}
           </Menu.Item>
-          <Menu.Item>
-            {({ active }) => (
-              <button
-                onClick={lexico}
-                className={`${
-                  active && "hover:bg-black"
-                } w-full h-full px-3 py-2 gap-4 place-items-center flex justify-between`}
-              >
-                Léxico <BsAlphabetUppercase />
-              </button>
-            )}
-          </Menu.Item> 
         </Menu.Items>
       </Menu>
     </div>
