@@ -15,7 +15,7 @@ tauri = { version = "1.5", features = [ "os-all", "dialog-save", "path-all", "fs
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 scanner = { git = "https://github.com/ErnestoRB/Scanner.git" }
-parser = { git = "https://github.com/ErnestoRB/Parser.git" }
+parser = { git = "https://github.com/ErnestoRB/Parser.git", branch = "error-handle" }
 portable-pty = "0.8.1"
 
 [features]
