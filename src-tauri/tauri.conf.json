@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "TauriIDE",
+    "productName": "VainillaIDE",
     "version": "0.0.0"
   },
   "tauri": {
