@@ -14,7 +14,7 @@ export function Errores() {
                 Error en el lexema '{error.lexemme}': {error.message}
               </p>
               <p>
-                En linea {error.start.lin}, columna {error.start.col}
+                En línea {error.start.lin}, columna {error.start.col}
               </p>
               <br />
             </div>
@@ -29,10 +29,10 @@ export function Errores() {
             {sintacticoResult[1].Parse.map((error, index) => (
               <div key={index} className="text-red-400">
                 <p>
-                  Error sintactico: {error.message}{" "}
+                  Error sintáctico: {error.message}{" "}
                   {error.current_token
-                    ? `En el token: ${error.current_token.token_type}`
-                    : ``}
+                    ? `En el token: ${error.current_token.token_type}, línea ${error.current_token.start.lin}, columna ${error.current_token.start.col}`
+                    : ""}
                 </p>
                 <br />
               </div>
