@@ -1,7 +1,6 @@
 import { TreeItem } from "@mui/x-tree-view";
 import { TreeNode } from "./TreeNode";
 import { Node as INode } from "../../../build/parse";
-import { v4 as uuidv4 } from "uuid";
 
 export function Node({ node }: { node: INode }) {
   if (!node) {

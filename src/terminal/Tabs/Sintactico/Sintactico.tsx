@@ -90,7 +90,7 @@ export function Sintactico() {
       {sintacticoResult && sintacticoResult[0] && (
         <SimpleTreeView
           expandedItems={expandedItems}
-          onExpandedItemsChange={(event, items) => setExpanded(items)}
+          onExpandedItemsChange={(_, items) => setExpanded(items)}
         >
           <TreeNode node={sintacticoResult[0]}></TreeNode>
         </SimpleTreeView>
