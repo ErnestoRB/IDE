@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import { ScanError, Token } from "./scan";
-type Option<T> = T | null;
+export type Option<T> = T | null;
 type TokenType = string;
 
 interface ParseError {
@@ -84,9 +84,9 @@ type ExpKind =
 type ExpType = "Void" | "Integer" | "Boolean";
 
 export type Node =
-  | { Stmt: StmtKind }
-  | { Exp: { kind: ExpKind; typ: ExpType } }
-  | { Decl: DeclKind };
+  | { Stmt: { kind: StmtKind; id: string } }
+  | { Exp: { kind: ExpKind; typ: ExpType; id: string } }
+  | { Decl: { kind: DeclKind; id: string } };
 
 interface DeclKindVar {
   typ: TokenType;

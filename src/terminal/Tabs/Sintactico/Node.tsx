@@ -1,7 +1,7 @@
 import { TreeItem } from "@mui/x-tree-view";
-import { v4 as uuidv4 } from "uuid";
 import { TreeNode } from "./TreeNode";
 import { Node as INode } from "../../../build/parse";
+import { v4 as uuidv4 } from "uuid";
 
 export function Node({ node }: { node: INode }) {
   if (!node) {
@@ -22,23 +22,25 @@ export function Node({ node }: { node: INode }) {
           if (key === "children") return null;
           if (typeof value === "object" && value !== null) {
             // Verifica si node.Decl está presente
-            if (key === "Decl" && value.Var) {
+            if (key === "Decl" && value.kind.Var) {
+              const id = node.Decl.id;
               return (
                 <TreeItem
-                  key={uuidv4()}
-                  itemId={uuidv4()}
-                  label={`Decl (${value.Var.name})`}
+                  key={id}
+                  itemId={id}
+                  label={`Decl (${value.kind.Var.name})`}
                 ></TreeItem>
               );
             }
             if (key === "Exp") {
+              const id = node.Exp.id;
               return Object.keys(value.kind).map((expKey) => {
                 const expValue = value.kind[expKey];
                 if (expKey == "Op") {
                   return (
                     <TreeItem
-                      key={uuidv4()}
-                      itemId={uuidv4()}
+                      key={id}
+                      itemId={id}
                       label={`Exp (Op) ${expValue.op}`}
                     >
                       {renderNode(expValue.left)}
@@ -50,8 +52,8 @@ export function Node({ node }: { node: INode }) {
                   const constValue = expValue.value;
                   return (
                     <TreeItem
-                      key={uuidv4()}
-                      itemId={uuidv4()}
+                      key={id}
+                      itemId={id}
                       label={`Exp (Const) ${constValue}`}
                     ></TreeItem>
                   );
@@ -59,8 +61,8 @@ export function Node({ node }: { node: INode }) {
                 if (expKey === "Id") {
                   return (
                     <TreeItem
-                      key={uuidv4()}
-                      itemId={uuidv4()}
+                      key={id}
+                      itemId={id}
                       label={`Exp (Id): ${expValue.name}`}
                     ></TreeItem>
                   );
@@ -70,13 +72,14 @@ export function Node({ node }: { node: INode }) {
             }
 
             if (key === "Stmt") {
-              return Object.keys(value).map((stmtKey) => {
-                const stmtValue = value[stmtKey];
+              const id = node.Stmt.id;
+              return Object.keys(value.kind).map((stmtKey) => {
+                const stmtValue = value.kind[stmtKey];
                 if (stmtKey === "In") {
                   return (
                     <TreeItem
-                      key={uuidv4()}
-                      itemId={uuidv4()}
+                      key={id}
+                      itemId={id}
                       label={`In: ${stmtValue.name}`}
                     ></TreeItem>
                   );
@@ -84,7 +87,7 @@ export function Node({ node }: { node: INode }) {
                 if (stmtKey === "Out") {
                   const expressionValue = stmtValue.expression;
                   return (
-                    <TreeItem key={uuidv4()} itemId={uuidv4()} label={`Out`}>
+                    <TreeItem key={id} itemId={id} label={`Out`}>
                       {renderNode(expressionValue)}
                     </TreeItem>
                   );
@@ -92,8 +95,8 @@ export function Node({ node }: { node: INode }) {
                 if (stmtKey === "Assign") {
                   return (
                     <TreeItem
-                      key={uuidv4()}
-                      itemId={uuidv4()}
+                      key={id}
+                      itemId={id}
                       label={`Assign: ${stmtValue.name}`}
                     >
                       {renderNode(stmtValue.value)}
@@ -102,18 +105,14 @@ export function Node({ node }: { node: INode }) {
                 }
                 if (stmtKey === "If") {
                   return (
-                    <TreeItem
-                      key={uuidv4()}
-                      itemId={uuidv4()}
-                      label={`If Condition`}
-                    >
-                      <TreeItem itemId={uuidv4()} label="condition">
+                    <TreeItem key={id} itemId={id} label={`If Condition`}>
+                      <TreeItem itemId={`${id}-0`} label="condition">
                         {renderNode(stmtValue.condition)}
                       </TreeItem>
-                      <TreeItem itemId={uuidv4()} label="then">
+                      <TreeItem itemId={`${id}-1`} label="then">
                         <TreeNode node={stmtValue.then_branch}></TreeNode>
                       </TreeItem>
-                      <TreeItem itemId={uuidv4()} label="else">
+                      <TreeItem itemId={`${id}-2`} label="else">
                         <TreeNode node={stmtValue.else_branch}></TreeNode>
                       </TreeItem>
                     </TreeItem>
@@ -121,15 +120,11 @@ export function Node({ node }: { node: INode }) {
                 }
                 if (stmtKey === "While") {
                   return (
-                    <TreeItem
-                      key={uuidv4()}
-                      itemId={uuidv4()}
-                      label={`While Condition`}
-                    >
-                      <TreeItem itemId={uuidv4()} label="condition">
+                    <TreeItem key={id} itemId={id} label={`While Condition`}>
+                      <TreeItem itemId={`${id}-0`} label="condition">
                         {renderNode(stmtValue.condition)}
                       </TreeItem>
-                      <TreeItem itemId={uuidv4()} label="body">
+                      <TreeItem itemId={`${id}-1`} label="body">
                         <TreeNode node={stmtValue.body}></TreeNode>{" "}
                       </TreeItem>
                     </TreeItem>
@@ -137,15 +132,11 @@ export function Node({ node }: { node: INode }) {
                 }
                 if (stmtKey === "Do") {
                   return (
-                    <TreeItem
-                      key={uuidv4()}
-                      itemId={uuidv4()}
-                      label={`Do Condition`}
-                    >
-                      <TreeItem itemId={uuidv4()} label="condition">
+                    <TreeItem key={id} itemId={id} label={`Do Condition`}>
+                      <TreeItem itemId={`${id}-0`} label="condition">
                         {renderNode(stmtValue.condition)}
                       </TreeItem>
-                      <TreeItem itemId={uuidv4()} label="body">
+                      <TreeItem itemId={`${id}-1`} label="body">
                         <TreeNode node={stmtValue.body}></TreeNode>{" "}
                       </TreeItem>
                     </TreeItem>
@@ -155,19 +146,9 @@ export function Node({ node }: { node: INode }) {
               });
             }
 
-            return (
-              <TreeItem key={uuidv4()} itemId={uuidv4()} label={key}>
-                {renderNode(value)}
-              </TreeItem>
-            );
+            return null; // no se debe renderizar otro tipo de nodo
           }
-          return (
-            <TreeItem
-              key={uuidv4()}
-              itemId={uuidv4()}
-              label={`${key}: ${value}`}
-            />
-          );
+          return <div>{`${key}: ${value}`}</div>;
         })}
       </>
     );
