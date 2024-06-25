@@ -25,7 +25,7 @@ export function TerminalPanel() {
             </Tab>
           ))}
         </Tab.List>
-        <Tab.Panels className="flex flex-1 overflow-clip">
+        <Tab.Panels className="flex flex-1 overflow-auto">
           {Tabs.map(({ content }, i) => (
             <Tab.Panel key={i} className="w-full overflow-y-auto bg-white">
               {content}
