@@ -292,9 +292,9 @@ dependencies = [
 
 [[package]]
 name = "cc"
-version = "1.0.100"
+version = "1.0.101"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c891175c3fb232128f48de6590095e59198bbeb8620c310be349bfc3afd12c7b"
+checksum = "ac367972e516d45567c7eafc73d24e1c193dcf200a8d94e9db7b3d38b349572d"
 
 [[package]]
 name = "cesu8"
@@ -1893,7 +1893,7 @@ dependencies = [
 [[package]]
 name = "parser"
 version = "0.1.0"
-source = "git+https://github.com/ErnestoRB/Parser.git#fb3d58db43c3653078ae036796b4fe917a2eaaa6"
+source = "git+https://github.com/ErnestoRB/Parser.git#395e564997987de6da0717715194573d45faa4fc"
 dependencies = [
  "clap",
  "scanner",
@@ -2429,7 +2429,7 @@ dependencies = [
 [[package]]
 name = "scanner"
 version = "0.1.0"
-source = "git+https://github.com/ErnestoRB/Scanner.git#1f2726d8d5c23515b6abb653b195c7861d920a60"
+source = "git+https://github.com/ErnestoRB/Scanner.git#55e4c713364f903a579da4dd377adc9d639b83fb"
 dependencies = [
  "clap",
  "phf 0.11.2",

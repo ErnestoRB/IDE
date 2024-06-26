@@ -27,7 +27,7 @@ export function Node({ node }: { node: INode }) {
                 <TreeItem
                   key={id}
                   itemId={id}
-                  label={`Decl (${value.kind.Var.name})`}
+                  label={`${value.kind.Var.typ}: ${value.kind.Var.name}`}
                 ></TreeItem>
               );
             }
