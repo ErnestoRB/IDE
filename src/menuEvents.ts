@@ -7,6 +7,7 @@ import { useEditor } from "./stores/editor";
 import { useLayoutStore } from "./stores/layout";
 import { scanFile } from "./build/scan";
 import { parseFile } from "./build/parse";
+import { analyzeFile } from "./build/analyze";
 
 export const openEditorFile = async () => {
   // Open a selection dialog for image files
@@ -88,6 +89,17 @@ export const sintactico = async () => {
   }
 };
 
+export const semantico = async () => {
+  try {
+    const result = await analyzeFile(
+      useEditor.getState().editor?.getValue() ?? ""
+    );
+    useFileStore.setState({ semanticoResult: result });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 //@ts-ignore
 if (window.__TAURI_IPC__) {
   appWindow.onMenuClicked(async ({ payload: menuId }) => {
@@ -112,6 +124,9 @@ if (window.__TAURI_IPC__) {
         break;
       case "sintactico":
         await sintactico();
+        break;
+      case "semantico":
+        await semantico();
         break;
     }
   });

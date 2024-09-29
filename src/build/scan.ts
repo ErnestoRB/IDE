@@ -7,7 +7,7 @@ export interface Token {
   end: Cursor;
 }
 
-interface Cursor {
+export interface Cursor {
   col: number;
   lin: number;
 }
