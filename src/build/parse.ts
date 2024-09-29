@@ -15,30 +15,30 @@ interface CompilationError {
 }
 
 export interface TreeNode {
-  children: TreeNode[];
+  // children: TreeNode[];
   sibling: Option<TreeNode>;
   node: Node;
 }
 
 interface StmtKindIf {
-  condition: Node;
+  condition: TreeNode;
   then_branch: Option<TreeNode>;
   else_branch: Option<TreeNode>;
 }
 
 interface StmtKindWhile {
-  condition: Node;
+  condition: TreeNode;
   body: Option<TreeNode>;
 }
 
 interface StmtKindDo {
   body: Option<TreeNode>;
-  condition: Node;
+  condition: TreeNode;
 }
 
 interface StmtKindAssign {
   name: string;
-  value: Node;
+  value: TreeNode;
 }
 
 interface StmtKindIn {

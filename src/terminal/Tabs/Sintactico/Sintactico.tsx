@@ -22,23 +22,23 @@ export function Sintactico() {
           ids.push(id);
           if ("If" in node.Stmt.kind) {
             ids.push(`${id}-0`); // contenedor
-            getNodeIds(node.Stmt.kind.If.condition);
+            getTreeNodeIds(node.Stmt.kind.If.condition);
             ids.push(`${id}-1`);
             getTreeNodeIds(node.Stmt.kind.If.else_branch!);
             ids.push(`${id}-2`);
             getTreeNodeIds(node.Stmt.kind.If.then_branch!);
           } else if ("While" in node.Stmt.kind) {
             ids.push(`${id}-0`); // contenedor
-            getNodeIds(node.Stmt.kind.While.condition);
+            getTreeNodeIds(node.Stmt.kind.While.condition);
             ids.push(`${id}-1`); // contenedor
             getTreeNodeIds(node.Stmt.kind.While.body!);
           } else if ("Do" in node.Stmt.kind) {
             ids.push(`${id}-0`); // contenedor
-            getNodeIds(node.Stmt.kind.Do.condition);
+            getTreeNodeIds(node.Stmt.kind.Do.condition);
             ids.push(`${id}-1`); // contenedor
             getTreeNodeIds(node.Stmt.kind.Do.body!);
           } else if ("Assign" in node.Stmt.kind) {
-            getNodeIds(node.Stmt.kind.Assign.value);
+            getTreeNodeIds(node.Stmt.kind.Assign.value);
           } else if ("Out" in node.Stmt.kind) {
             getNodeIds(node.Stmt.kind.Out.expression);
           }
