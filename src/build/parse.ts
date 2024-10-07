@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import { ScanError, Token } from "./scan";
+import { ExpValue } from "./analyze";
 export type Option<T> = T | null;
 type TokenType = string;
 
@@ -81,11 +82,11 @@ type ExpKind =
   | { ConstF: ExpKindConstF }
   | { Id: ExpKindId };
 
-type ExpType = "Void" | "Integer" | "Boolean";
+type ExpType = "Void" | "Integer" | "Float" | "Boolean";
 
 export type Node =
   | { Stmt: { kind: StmtKind; id: string } }
-  | { Exp: { kind: ExpKind; typ: ExpType; id: string } }
+  | { Exp: { kind: ExpKind; typ: ExpType; val: ExpValue; id: string } }
   | { Decl: { kind: DeclKind; id: string } };
 
 interface DeclKindVar {

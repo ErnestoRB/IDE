@@ -6,8 +6,8 @@ mod terminal;
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use parser::structures::{SymbolData, SymbolError, TreeNode};
-use parser::{create_symbol_table, parse};
+use parser::structures::{AnalyzeError, SymbolData, TreeNode};
+use parser::{analyze, parse};
 use scanner::tokenize;
 use structures::CompilationError;
 use tauri::async_runtime::Mutex as AsyncMutex;
@@ -50,10 +50,26 @@ fn vainilla_parse(contents: String) -> (Option<TreeNode>, CompilationError) {
 }
 
 #[tauri::command]
-fn vainilla_analyze(contents: String) -> Option<(HashMap<String, SymbolData>, Vec<SymbolError>)> {
+fn vainilla_analyze(
+    contents: String,
+) -> Option<(HashMap<String, SymbolData>, Vec<AnalyzeError>, TreeNode)> {
     let parse_result = vainilla_parse(contents);
-    let node = parse_result.0?;
-    Some(create_symbol_table(&node))
+    match parse_result.1 {
+        CompilationError::Scan(vec) => {
+            if vec.len() > 0 {
+                return None;
+            }
+        }
+        CompilationError::Parse(vec) => {
+            if vec.len() > 0 {
+                return None;
+            }
+        }
+    };
+
+    let mut node = parse_result.0?;
+    let (errors, table) = analyze(&mut node);
+    Some((table, errors, node))
 }
 
 fn main() {

@@ -1893,7 +1893,7 @@ dependencies = [
 [[package]]
 name = "parser"
 version = "0.1.0"
-source = "git+https://github.com/ErnestoRB/Parser.git?branch=add-symbol-table#9f75d474c53b9fcf5e5d86410cc5b718d9de7780"
+source = "git+https://github.com/ErnestoRB/Parser.git?branch=add-symbol-table#78a544bea6b135bcb11c32bc6765adf7335afe09"
 dependencies = [
  "clap",
  "scanner",

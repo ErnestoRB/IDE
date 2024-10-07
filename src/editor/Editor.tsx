@@ -15,6 +15,7 @@ export function Editor() {
   const { activeFile } = useFileStore();
   const setLexicoResult = useFileStore((s) => s.setLexicoResult);
   const setSintacticoResult = useFileStore((s) => s.setSintacticoResult);
+  const setSemanticoResult = useFileStore((s) => s.setSemanticoResult);
 
   const theme = useEditor((s) => s.theme);
   const monaco = useMonaco();
@@ -131,6 +132,7 @@ export function Editor() {
           });
 
           analyzeFile(str).then((v) => {
+            setSemanticoResult(v);
             if (v && v[1].length > 0) {
               monaco.editor.setModelMarkers(
                 editor.getModel()!,

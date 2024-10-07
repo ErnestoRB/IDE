@@ -29,7 +29,7 @@ export function Errores() {
           <div>
             {semanticoResult[1].map((error, index) => (
               <div key={index} className="text-red-400">
-                <p>Error al crear tabla de símbolos: {error.message}</p>
+                <p>Error semántico: {error.message}</p>
                 <p>
                   En línea {error.cursor.lin}, columna {error.cursor.col}
                 </p>
