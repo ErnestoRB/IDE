@@ -37,7 +37,7 @@ export function getExpValueAsString(value: ExpValue): string {
     return "Integer: " + value.Int;
   }
   if ("Float" in value) {
-    return "Float: " + value.Float;
+    return "Float: " + value.Float.toFixed(2);
   }
   if ("Boolean" in value) {
     return "Boolean: " + value.Boolean;

@@ -62,7 +62,10 @@ export function Node({
                 );
               }
               if (expKey == "Const" || expKey == "ConstF") {
-                const constValue = expValue.value;
+                let constValue = expValue.value;
+                if (expKey === "ConstF") {
+                  constValue = constValue.toFixed(2);
+                }
                 return (
                   <TreeItem
                     key={id}
