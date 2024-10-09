@@ -112,11 +112,15 @@ export function Node({
                 );
               }
               if (stmtKey === "Assign") {
+                const val = stmtValue.exp_value;
+                console.log({ stmtValue, val });
                 return (
                   <TreeItem
                     key={id}
                     itemId={id}
-                    label={`Assign: ${stmtValue.name}`}
+                    label={`Assign: ${
+                      stmtValue.name
+                    } | Value: ${getExpValueAsString(val)}`}
                   >
                     <TreeNode
                       showAttributes={showAttributes}
