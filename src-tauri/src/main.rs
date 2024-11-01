@@ -6,8 +6,8 @@ mod terminal;
 use std::collections::HashMap;
 use std::sync::Arc;
 
-use parser::parse;
-use parser::structures::TreeNode;
+use parser::structures::{AnalyzeError, SymbolData, TreeNode};
+use parser::{analyze, parse};
 use scanner::tokenize;
 use structures::CompilationError;
 use tauri::async_runtime::Mutex as AsyncMutex;
@@ -47,6 +47,29 @@ fn vainilla_parse(contents: String) -> (Option<TreeNode>, CompilationError) {
     }
     let tree = parse(tokens.0);
     (tree.0, CompilationError::Parse(tree.1))
+}
+
+#[tauri::command]
+fn vainilla_analyze(
+    contents: String,
+) -> Option<(HashMap<String, SymbolData>, Vec<AnalyzeError>, TreeNode)> {
+    let parse_result = vainilla_parse(contents);
+    match parse_result.1 {
+        CompilationError::Scan(vec) => {
+            if vec.len() > 0 {
+                return None;
+            }
+        }
+        CompilationError::Parse(vec) => {
+            if vec.len() > 0 {
+                return None;
+            }
+        }
+    };
+
+    let mut node = parse_result.0?;
+    let (errors, table) = analyze(&mut node);
+    Some((table, errors, node))
 }
 
 fn main() {
@@ -133,7 +156,8 @@ fn main() {
             get_env,
             get_envs,
             vainilla_tokenize,
-            vainilla_parse
+            vainilla_parse,
+            vainilla_analyze,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

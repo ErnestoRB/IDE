@@ -4,7 +4,7 @@ import { BsAlphabetUppercase } from "react-icons/bs";
 import { MdMenuBook } from "react-icons/md";
 import { BsGear } from "react-icons/bs";
 import { GoChevronDown } from "react-icons/go";
-import { lexico, sintactico } from "../../menuEvents";
+import { lexico, semantico, sintactico } from "../../menuEvents";
 
 export function CompilerButton() {
   return (
@@ -43,13 +43,14 @@ export function CompilerButton() {
           </Menu.Item>
           <Menu.Item>
             {({ active }) => (
-              <a
+              <button
+                onClick={semantico}
                 className={`${
                   active && "hover:bg-black"
                 } w-full h-full px-3 py-2 gap-4 place-items-center flex justify-between`}
               >
                 Semántico <MdMenuBook />
-              </a>
+              </button>
             )}
           </Menu.Item>
         </Menu.Items>

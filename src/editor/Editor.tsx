@@ -7,6 +7,7 @@ import { VAINILLA_ID } from "../monaco/vainilla";
 import { scanFile } from "../build/scan";
 import { setupEditorCommands } from "./setup";
 import { parseFile } from "../build/parse";
+import { analyzeFile } from "../build/analyze";
 
 export function Editor() {
   const { terminalPanelRef, lateralPanelRef } = useLayoutStore();
@@ -14,6 +15,7 @@ export function Editor() {
   const { activeFile } = useFileStore();
   const setLexicoResult = useFileStore((s) => s.setLexicoResult);
   const setSintacticoResult = useFileStore((s) => s.setSintacticoResult);
+  const setSemanticoResult = useFileStore((s) => s.setSemanticoResult);
 
   const theme = useEditor((s) => s.theme);
   const monaco = useMonaco();
@@ -93,7 +95,7 @@ export function Editor() {
             );
           });
           parseFile(str).then((v) => {
-            console.log({ v });
+            // console.log({ v });
             setSintacticoResult(v);
             if (v[1].Parse) {
               monaco.editor.setModelMarkers(
@@ -121,6 +123,26 @@ export function Editor() {
                     startLineNumber:
                       editor.getModel()?.getLineCount() ?? 100000,
                     endLineNumber: editor.getModel()?.getLineCount() ?? 100000,
+                    message: v.message,
+                    severity: monaco.MarkerSeverity.Error,
+                  };
+                })
+              );
+            }
+          });
+
+          analyzeFile(str).then((v) => {
+            setSemanticoResult(v);
+            if (v && v[1].length > 0) {
+              monaco.editor.setModelMarkers(
+                editor.getModel()!,
+                "",
+                v[1].map((v) => {
+                  return {
+                    endColumn: v.cursor.col + 1,
+                    startColumn: v.cursor.col,
+                    startLineNumber: v.cursor.lin,
+                    endLineNumber: v.cursor.lin,
                     message: v.message,
                     severity: monaco.MarkerSeverity.Error,
                   };

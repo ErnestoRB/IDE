@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import { ScanError, Token } from "./scan";
+import { ExpValue } from "./analyze";
 export type Option<T> = T | null;
 type TokenType = string;
 
@@ -15,30 +16,30 @@ interface CompilationError {
 }
 
 export interface TreeNode {
-  children: TreeNode[];
+  // children: TreeNode[];
   sibling: Option<TreeNode>;
   node: Node;
 }
 
 interface StmtKindIf {
-  condition: Node;
+  condition: TreeNode;
   then_branch: Option<TreeNode>;
   else_branch: Option<TreeNode>;
 }
 
 interface StmtKindWhile {
-  condition: Node;
+  condition: TreeNode;
   body: Option<TreeNode>;
 }
 
 interface StmtKindDo {
   body: Option<TreeNode>;
-  condition: Node;
+  condition: TreeNode;
 }
 
 interface StmtKindAssign {
   name: string;
-  value: Node;
+  value: TreeNode;
 }
 
 interface StmtKindIn {
@@ -81,11 +82,11 @@ type ExpKind =
   | { ConstF: ExpKindConstF }
   | { Id: ExpKindId };
 
-type ExpType = "Void" | "Integer" | "Boolean";
+type ExpType = "Void" | "Integer" | "Float" | "Boolean";
 
 export type Node =
   | { Stmt: { kind: StmtKind; id: string } }
-  | { Exp: { kind: ExpKind; typ: ExpType; id: string } }
+  | { Exp: { kind: ExpKind; typ: ExpType; val: ExpValue; id: string } }
   | { Decl: { kind: DeclKind; id: string } };
 
 interface DeclKindVar {
