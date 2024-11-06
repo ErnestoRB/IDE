@@ -17,9 +17,11 @@ interface IFileStore {
   lexicoResult: ScanOutput | null;
   sintacticoResult: ParseOutput | null;
   semanticoResult: AnalyzeOutput | null;
+  generatedCode: string | null;
   setLexicoResult: (output: ScanOutput | null) => any;
   setSintacticoResult: (output: ParseOutput | null) => any;
   setSemanticoResult: (output: AnalyzeOutput | null) => any;
+  setGeneratedCode: (code: string | null) => any;
 }
 
 export const useFileStore = create<IFileStore>()(
@@ -32,11 +34,15 @@ export const useFileStore = create<IFileStore>()(
       lexicoResult: null,
       sintacticoResult: null,
       semanticoResult: null,
+      generatedCode: null,
       setLexicoResult: (output: ScanOutput | null) =>
         set({ lexicoResult: output }),
       setSintacticoResult: (output: any) => set({ sintacticoResult: output }),
       setSemanticoResult: (output: AnalyzeOutput | null) =>
         set({ semanticoResult: output }),
+      setGeneratedCode(code) {
+        set({ generatedCode: code });
+      },
     }),
     {
       name: "files",

@@ -8,6 +8,8 @@ import { useLayoutStore } from "./stores/layout";
 import { scanFile } from "./build/scan";
 import { parseFile } from "./build/parse";
 import { analyzeFile } from "./build/analyze";
+import { codegenFile } from "./build/codegen";
+import { run } from "./build/run";
 
 export const openEditorFile = async () => {
   // Open a selection dialog for image files
@@ -100,6 +102,28 @@ export const semantico = async () => {
   }
 };
 
+export const codigoIntermedio = async () => {
+  try {
+    const result = await codegenFile(
+      useEditor.getState().editor?.getValue() ?? ""
+    );
+    useFileStore.setState({ generatedCode: result });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const runProgram = async () => {
+  try {
+    const code = useFileStore.getState().generatedCode;
+    if (code) {
+      run();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 //@ts-ignore
 if (window.__TAURI_IPC__) {
   appWindow.onMenuClicked(async ({ payload: menuId }) => {
@@ -126,6 +150,9 @@ if (window.__TAURI_IPC__) {
         await sintactico();
         break;
       case "semantico":
+        await semantico();
+        break;
+      case "run":
         await semantico();
         break;
     }

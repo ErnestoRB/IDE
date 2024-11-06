@@ -4,13 +4,19 @@ import { BsAlphabetUppercase } from "react-icons/bs";
 import { MdMenuBook } from "react-icons/md";
 import { BsGear } from "react-icons/bs";
 import { GoChevronDown } from "react-icons/go";
-import { lexico, semantico, sintactico } from "../../menuEvents";
+import {
+  codigoIntermedio,
+  lexico,
+  runProgram,
+  semantico,
+  sintactico,
+} from "../../menuEvents";
 
 export function CompilerButton() {
   return (
     <div className="flex text-white bg-stone-900 hover:bg-black">
       <button className="grid place-items-center w-10 h-10">
-        <BsPlayCircle size={20} />
+        <BsPlayCircle onClick={() => runProgram()} size={20} />
       </button>
       <Menu as="div" className="relative">
         <Menu.Button className="grid place-items-center h-full bg-black">
@@ -50,6 +56,18 @@ export function CompilerButton() {
                 } w-full h-full px-3 py-2 gap-4 place-items-center flex justify-between`}
               >
                 Semántico <MdMenuBook />
+              </button>
+            )}
+          </Menu.Item>
+          <Menu.Item>
+            {({ active }) => (
+              <button
+                onClick={codigoIntermedio}
+                className={`${
+                  active && "hover:bg-black"
+                } w-full h-full px-3 py-2 gap-4 place-items-center flex justify-between`}
+              >
+                Generación de código
               </button>
             )}
           </Menu.Item>

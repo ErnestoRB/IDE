@@ -8,7 +8,7 @@ import {
   GoTable,
   GoTerminal,
 } from "react-icons/go";
-import { TerminalContainer } from "./Tabs/Terminal";
+import { TerminalContainer } from "./Tabs/TerminalContainer";
 import { Lexico } from "./Tabs/Lexico";
 import { Sintactico } from "./Tabs/Sintactico/Sintactico";
 import { Semantico } from "./Tabs/Semantico";

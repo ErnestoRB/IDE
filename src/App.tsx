@@ -24,7 +24,7 @@ function App() {
   const lateralRef = useRef<ImperativePanelHandle>(null);
   const terminalRef = useRef<ImperativePanelHandle>(null);
   const [setAvailableTerminals] = useTerminalStore((s) => [
-    s.setAvailableTerminals,
+    s.setAvailableShells,
   ]);
   const { setLateralPanelRef, setTerminalPanelRef, showNavbar } =
     useLayoutStore();
