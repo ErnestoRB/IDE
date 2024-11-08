@@ -8,6 +8,7 @@ import { scanFile } from "../build/scan";
 import { setupEditorCommands } from "./setup";
 import { parseFile } from "../build/parse";
 import { analyzeFile } from "../build/analyze";
+import { codegenFile } from "../build/codegen";
 
 export function Editor() {
   const { terminalPanelRef, lateralPanelRef } = useLayoutStore();
@@ -16,6 +17,7 @@ export function Editor() {
   const setLexicoResult = useFileStore((s) => s.setLexicoResult);
   const setSintacticoResult = useFileStore((s) => s.setSintacticoResult);
   const setSemanticoResult = useFileStore((s) => s.setSemanticoResult);
+  const setGeneratedCode = useFileStore((s) => s.setGeneratedCode);
 
   const theme = useEditor((s) => s.theme);
   const monaco = useMonaco();
@@ -149,6 +151,10 @@ export function Editor() {
                 })
               );
             }
+          });
+
+          codegenFile(str).then((v) => {
+            setGeneratedCode(v);
           });
         }}
       />
