@@ -35,7 +35,12 @@ export const useTerminalStore = create<ITerminalStore>((set) => ({
   },
   removeTerminal(ttyId) {
     set((state) => ({
-      terminals: state.terminals.filter((t) => t.ttyId !== ttyId),
+      terminals: state.terminals.filter((t) => t.ttyId != ttyId),
+      activeTerminal:
+        state.activeTerminal?.ttyId === ttyId
+          ? undefined
+          : state.activeTerminal,
+      activeTerminalIndex: undefined,
     }));
   },
   setActiveTerminalIndex(index) {
