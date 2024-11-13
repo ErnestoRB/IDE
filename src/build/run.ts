@@ -1,7 +1,7 @@
 import { useFileStore } from "../stores/files";
 import { useLayoutStore } from "../stores/layout";
 import { useTerminalStore } from "../stores/terminal";
-import { createShell, createTerminalItem } from "../terminal/backend";
+import { createTerminalItem } from "../terminal/backend";
 
 export function run() {
   const code = useFileStore.getState().generatedCode;
@@ -27,7 +27,7 @@ export function run() {
             console.log(`Terminal ${item.ttyId} killed with code ${code}`);
             useTerminalStore.getState().removeTerminal(item.ttyId);
           })
-          .then((unlisten) => {
+          .then(() => {
             console.log(`Unlistening for exit on terminal ${item.ttyId}`);
           });
       });

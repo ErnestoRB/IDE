@@ -38,7 +38,7 @@ export function TerminalContainer() {
             console.log(`Terminal ${item.ttyId} killed with code ${code}`);
             removeTerminal(item.ttyId);
           })
-          .then((unlisten) => {
+          .then(() => {
             console.log(`Unlistening for exit on terminal ${item.ttyId}`);
           });
       });
@@ -89,7 +89,7 @@ export function TerminalContainer() {
                     );
                     removeTerminal(item.ttyId);
                   })
-                  .then((unlisten) => {
+                  .then(() => {
                     console.log(
                       `Unlistening for exit on terminal ${item.ttyId}`
                     );

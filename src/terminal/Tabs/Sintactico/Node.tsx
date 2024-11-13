@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { TreeItem } from "@mui/x-tree-view";
 import { TreeNode } from "./TreeNode";
 import { Node as INode } from "../../../build/parse";

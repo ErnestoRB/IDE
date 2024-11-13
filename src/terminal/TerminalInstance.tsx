@@ -16,7 +16,7 @@ interface TerminalComponentProps {
 }
 
 export function TerminalComponent({
-  ttyId: id,
+  // ttyId: id,
   funcs,
 }: // onKill,
 TerminalComponentProps) {
