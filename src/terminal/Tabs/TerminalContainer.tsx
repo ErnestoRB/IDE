@@ -23,11 +23,12 @@ export function TerminalContainer() {
     (s) => s.setActiveTerminalIndex
   );
 
-  useEffect(() => {
-    console.log("Terminals changed", terminals);
-  }, [terminals]);
+  // useEffect(() => {
+  //   console.log("Terminals changed", terminals);
+  // }, [terminals]);
 
   useEffect(() => {
+    if (useTerminalStore.getState().terminals.length > 0) return;
     // construir shell por defecto
     getDefaultShell().then((s) => {
       setDefaultShell(s);
@@ -60,7 +61,20 @@ export function TerminalContainer() {
         >
           Shells disponibles:{" "}
           <div className="relative">
-            <Listbox value={shell} onChange={setDefaultShell}>
+            <select
+              onChange={(e) => {
+                e.preventDefault();
+                setDefaultShell(e.target.value);
+              }}
+              className="appearance-none flex items-center p-2 bg-stone-900 hover:bg-black pointer cursor-pointer rounded-sm outline-none"
+            >
+              {availableShells?.map((shell, i) => (
+                <option key={i} value={shell}>
+                  {shell}
+                </option>
+              ))}
+            </select>
+            {/* <Listbox value={shell} onChange={setDefaultShell}>
               <Listbox.Button className="flex items-center p-2 bg-stone-900 rounded-sm">
                 {shell}
                 <GoChevronDown></GoChevronDown>
@@ -76,7 +90,7 @@ export function TerminalContainer() {
                   </Listbox.Option>
                 ))}
               </Listbox.Options>
-            </Listbox>
+            </Listbox> */}
           </div>
           <button
             onClick={() => {
