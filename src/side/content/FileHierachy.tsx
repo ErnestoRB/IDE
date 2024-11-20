@@ -8,16 +8,31 @@ export interface IFileItem {
 }
 
 export function FileHierachy() {
+  const folder = useFileStore((s) => s.folder);
   const files = useFileStore((s) => s.files);
+  const activeFile = useFileStore((s) => s.activeFile);
+  const setActiveFile = useFileStore((s) => s.setActiveFile);
 
   return (
     <div className="w-full h-full">
       <div className="px-2 text-white flex items-center text-sm h-6 w-full bg-stone-950">
-        <p>Archivos</p>
+        <p> {folder ? folder.split("/").pop() : "Archivos"}</p>
       </div>
-      <div className="w-full flex flex-col">
+      <div
+        className="w-full flex flex-col"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         {files.map((f) => (
-          <FileItem key={f.path} file={f}></FileItem>
+          <FileItem
+            active={f.path === activeFile?.path}
+            onClick={() => {
+              setActiveFile(f.path);
+            }}
+            key={f.path}
+            file={f}
+          ></FileItem>
         ))}
         {!files ||
           (files.length == 0 && (

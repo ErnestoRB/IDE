@@ -11,15 +11,25 @@ import {
   semantico,
   sintactico,
 } from "../../menuEvents";
+import { useFileStore } from "../../stores/files";
 
 export function CompilerButton() {
+  const activeFile = useFileStore((s) => s.activeFile);
+
   return (
     <div className="flex text-white bg-stone-900 hover:bg-black">
-      <button className="grid place-items-center w-10 h-10">
-        <BsPlayCircle onClick={() => runProgram()} size={20} />
+      <button
+        disabled={!activeFile}
+        onClick={() => runProgram()}
+        className="grid place-items-center w-10 h-10 disabled:opacity-50"
+      >
+        <BsPlayCircle size={20} />
       </button>
       <Menu as="div" className="relative">
-        <Menu.Button className="grid place-items-center h-full bg-black">
+        <Menu.Button
+          disabled={!activeFile}
+          className="disabled:opacity-50 grid place-items-center h-full bg-black"
+        >
           <GoChevronDown></GoChevronDown>
         </Menu.Button>
         <Menu.Items className="absolute top-10 left-0 z-10 grid gap-2 justify-center place-items-center text-white bg-stone-900">

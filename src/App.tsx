@@ -18,6 +18,9 @@ import { setupVainilla } from "./monaco/vainilla";
 import { AppModal } from "./AppModal";
 import { useTerminalStore } from "./stores/terminal";
 import { getAvailableShells } from "./terminal/backend";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 loader.init().then(setupVainilla);
 
 function App() {
@@ -69,6 +72,7 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen max-h-screen overflow-hidden select-none">
+      <ToastContainer />
       <AppModal />
       {showNavbar && <NavBar></NavBar>}
       <div className="flex bg-black w-full h-full flex-initial">

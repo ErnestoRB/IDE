@@ -2,13 +2,23 @@ import { useFileStore } from "../stores/files";
 import { useLayoutStore } from "../stores/layout";
 import { useTerminalStore } from "../stores/terminal";
 import { createTerminalItem } from "../terminal/backend";
+import { codegenFile } from "./codegen";
+import { toast } from "react-toastify";
 
-export function run() {
-  const code = useFileStore.getState().generatedCode;
-  if (!code) {
-    console.error("No code to run");
+export async function run() {
+  const file = useFileStore.getState().activeFile;
+  if (!file) {
+    console.error("No open file");
+    toast.error("No hay ningun archivo activo");
     return;
   }
+  const code = await codegenFile(true);
+  if (!code) {
+    console.error("No code generated");
+    toast.error("No hay ningun código generado para ejecutar");
+    return;
+  }
+  const { path } = file;
   let activeTerminal = useTerminalStore.getState().activeTerminal;
   const terminals = useTerminalStore.getState().terminals;
   if (!activeTerminal) {
@@ -41,9 +51,15 @@ export function run() {
   useLayoutStore.getState().setActiveTab(0); // mostrar tab de temrinal
   const shell = activeTerminal.shell;
   console.log(`Running code in shell ${shell}, ttyid: ${activeTerminal.ttyId}`);
-  activeTerminal.ttyFunctions.sendDataShell("vainilla-machine run-stdin\n");
-  activeTerminal.ttyFunctions.sendDataShell(code + "\n");
-  activeTerminal.ttyFunctions.sendDataShell("\x04");
+  const vmPath = path.replace(/\.[^/.]+$/, ".vm");
+  toast.info("Intentando ejecutar el archivo: " + file.name);
+
+  activeTerminal.ttyFunctions.sendDataShell(
+    `vainilla-machine run '${vmPath}'\n`
+  );
+  // activeTerminal.ttyFunctions.sendDataShell("vainilla-machine run\n");
+  // activeTerminal.ttyFunctions.sendDataShell(vmPath + "\n");
+  // activeTerminal.ttyFunctions.sendDataShell("\x04");
 
   // if (shell.includes("bash")) {
   // } else if (shell.includes("pwsh")) {
