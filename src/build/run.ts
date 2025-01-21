@@ -1,3 +1,4 @@
+import { EOL } from "@tauri-apps/api/os";
 import { useFileStore } from "../stores/files";
 import { useLayoutStore } from "../stores/layout";
 import { useTerminalStore } from "../stores/terminal";
@@ -54,9 +55,17 @@ export async function run() {
   const vmPath = path.replace(/\.[^/.]+$/, ".vm");
   toast.info("Intentando ejecutar el archivo: " + file.name);
 
-  activeTerminal.ttyFunctions.sendDataShell(
-    `vainilla-machine run '${vmPath}'\n`
-  );
+  if(activeTerminal.shell.toLowerCase().includes("cmd")) {
+    activeTerminal.ttyFunctions.sendDataShell(
+      `vainilla-machine run "${vmPath}"${EOL}`
+    );
+  } else {
+    activeTerminal.ttyFunctions.sendDataShell(
+      `vainilla-machine run '${vmPath}'${EOL}`
+    );
+    
+  }
+
   // activeTerminal.ttyFunctions.sendDataShell("vainilla-machine run\n");
   // activeTerminal.ttyFunctions.sendDataShell(vmPath + "\n");
   // activeTerminal.ttyFunctions.sendDataShell("\x04");
