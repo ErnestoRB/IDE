@@ -5,11 +5,13 @@ import { SimpleTreeView } from "@mui/x-tree-view/SimpleTreeView";
 import { TreeNode as ITreeNode, Node } from "../../../build/parse";
 import { BiSolidCheckboxMinus } from "react-icons/bi";
 import { MdOutlineExpand } from "react-icons/md";
+import { useVainillaTheme } from "../../../theme";
 
 export function Sintactico() {
   const sintacticoResult = useFileStore((state) => state.sintacticoResult);
   const [treeIds, setTreeIds] = useState<string[]>([]);
   const [expandedItems, setExpanded] = useState<string[]>([]);
+  const theme = useVainillaTheme();
 
   useEffect(() => {
     if (sintacticoResult && sintacticoResult[0]) {
@@ -70,7 +72,7 @@ export function Sintactico() {
   }, [sintacticoResult]);
 
   return (
-    <div className="flex flex-col">
+    <div className={`flex flex-col ${theme.selectedTheme.definition["text"]}`}>
       <div className="flex bg-black text-white px-2 gap-2">
         <button
           className="flex justify-center items-center"

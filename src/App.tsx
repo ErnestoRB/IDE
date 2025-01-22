@@ -4,7 +4,7 @@ import { Editor } from "./editor/Editor";
 import { useCallback, useEffect, useRef } from "react";
 import { TerminalPanel } from "./terminal/TerminalPanel";
 import { useLayoutStore } from "./stores/layout";
-import { NavBar } from "./side/NavBar";
+import { NavBar } from "./top/items/NavBar";
 
 import {
   ImperativePanelHandle,
@@ -18,13 +18,16 @@ import { setupVainilla } from "./monaco/vainilla";
 import { AppModal } from "./AppModal";
 import { useTerminalStore } from "./stores/terminal";
 import { getAvailableShells } from "./terminal/backend";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 loader.init().then(setupVainilla);
 
 function App() {
   const lateralRef = useRef<ImperativePanelHandle>(null);
   const terminalRef = useRef<ImperativePanelHandle>(null);
   const [setAvailableTerminals] = useTerminalStore((s) => [
-    s.setAvailableTerminals,
+    s.setAvailableShells,
   ]);
   const { setLateralPanelRef, setTerminalPanelRef, showNavbar } =
     useLayoutStore();
@@ -69,6 +72,7 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen max-h-screen overflow-hidden select-none">
+      <ToastContainer />
       <AppModal />
       {showNavbar && <NavBar></NavBar>}
       <div className="flex bg-black w-full h-full flex-initial">

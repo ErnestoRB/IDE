@@ -1,17 +1,45 @@
 import { useFileStore } from "../../stores/files";
+import { useVainillaTheme } from "../../theme";
 
 export function Simbolos() {
   const result = useFileStore((f) => f.semanticoResult);
+  const theme = useVainillaTheme();
 
   return (
-    <div className="w-full h-full bg-stone-700 text-white grid text-center">
-      <div className="w-full grid grid-cols-6 border border-white">
-        <div className="bg-stone-900 border">Nombre</div>
-        <div className="bg-stone-900 border">Tipo</div>
-        <div className="bg-stone-900 border">Valor</div>
-        <div className="bg-stone-900 border">Definicion</div>
-        <div className="bg-stone-900 border">Ubicacion en memoria</div>
-        <div className="bg-stone-900 border border-white">Lineas de Uso</div>
+    <div
+      className={`w-full grid text-center ${theme.selectedTheme.definition["primary-2"]} ${theme.selectedTheme.definition["text"]}`}
+    >
+      <div className="w-full grid grid-cols-6 ">
+        <div
+          className={`${theme.selectedTheme.definition["primary-5"]} border`}
+        >
+          Nombre
+        </div>
+        <div
+          className={`${theme.selectedTheme.definition["primary-5"]} border`}
+        >
+          Tipo
+        </div>
+        <div
+          className={`${theme.selectedTheme.definition["primary-5"]} border`}
+        >
+          Valor
+        </div>
+        <div
+          className={`${theme.selectedTheme.definition["primary-5"]} border`}
+        >
+          Definicion
+        </div>
+        <div
+          className={`${theme.selectedTheme.definition["primary-5"]} border`}
+        >
+          Ubicacion en memoria
+        </div>
+        <div
+          className={`${theme.selectedTheme.definition["primary-5"]} border`}
+        >
+          Lineas de Uso
+        </div>
       </div>
       {result &&
         Object.entries(result[0]).map(([name, data]) => {
@@ -25,7 +53,7 @@ export function Simbolos() {
           return (
             <div
               key={name}
-              className="w-full bg-stone-700 h-full grid grid-cols-6 border"
+              className={`w-full ${theme.selectedTheme.definition["primary-1"]} h-full grid grid-cols-6 `}
             >
               <div className="border">{name}</div>
               <div className="border">{data.typ}</div>

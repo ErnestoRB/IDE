@@ -3,9 +3,11 @@
 mod structures;
 mod terminal;
 
+use core::error;
 use std::collections::HashMap;
 use std::sync::Arc;
 
+use parser::codegen::generate_code;
 use parser::structures::{AnalyzeError, SymbolData, TreeNode};
 use parser::{analyze, parse};
 use scanner::tokenize;
@@ -70,6 +72,31 @@ fn vainilla_analyze(
     let mut node = parse_result.0?;
     let (errors, table) = analyze(&mut node);
     Some((table, errors, node))
+}
+
+#[tauri::command]
+fn vainilla_codegen(contents: String) -> Option<String> {
+    let parse_result = vainilla_parse(contents);
+    match parse_result.1 {
+        CompilationError::Scan(vec) => {
+            if vec.len() > 0 {
+                return None;
+            }
+        }
+        CompilationError::Parse(vec) => {
+            if vec.len() > 0 {
+                return None;
+            }
+        }
+    };
+
+    let mut node = parse_result.0?;
+    let (errors, table) = analyze(&mut node);
+    if (errors.len() > 0) {
+        return None;
+    }
+    let code = generate_code(&mut node);
+    Some(code)
 }
 
 fn main() {
@@ -158,6 +185,7 @@ fn main() {
             vainilla_tokenize,
             vainilla_parse,
             vainilla_analyze,
+            vainilla_codegen
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

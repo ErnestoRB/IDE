@@ -14,6 +14,8 @@ export interface ILayoutStore {
   modalContent?: React.ReactNode;
   showNavbar: boolean;
   toggleNavbar: () => unknown;
+  activeTab: number;
+  setActiveTab: (tab: number) => unknown;
 }
 export const useLayoutStore = create<ILayoutStore>()(
   persist(
@@ -27,6 +29,8 @@ export const useLayoutStore = create<ILayoutStore>()(
       closeModal: () => set({ isModalOpen: !get().isModalOpen }),
       showNavbar: true,
       toggleNavbar: () => set({ showNavbar: !get().showNavbar }),
+      activeTab: 0,
+      setActiveTab: (tab: number) => set({ activeTab: tab }),
     }),
     {
       name: "layout",
