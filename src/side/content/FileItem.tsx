@@ -1,5 +1,6 @@
 import { GoFileCode } from "react-icons/go";
 import { IFileItem } from "./FileHierachy";
+import { useVainillaTheme } from "../../theme";
 
 export interface IFileItemProps {
   file: IFileItem;
@@ -11,14 +12,16 @@ export function FileItem({
   onClick,
   active,
 }: IFileItemProps) {
+  const theme = useVainillaTheme();
+
   return (
     <div
       onClick={onClick}
       title={path}
       role="button"
-      className={`overflow-clip px-2 text-sm text-white w-full bg-stone-800 hover:bg-stone-900 flex items-center gap-2 ${
-        active ? "bg-stone-900" : ""
-      }`}
+      className={`overflow-clip px-2 text-sm w-full flex items-center gap-2 ${
+        active ? theme.selectedTheme.definition.fileItem__active : ""
+      } ${theme.selectedTheme.definition.fileItem}`}
     >
       <GoFileCode className="min-w-fit"></GoFileCode>{" "}
       <span className="flex-1" title={path}>

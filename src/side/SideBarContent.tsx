@@ -1,3 +1,4 @@
+import { useVainillaTheme } from "../theme";
 import { FileHierachy } from "./content/FileHierachy";
 
 interface ISideBarContentProps {
@@ -5,8 +6,9 @@ interface ISideBarContentProps {
 }
 
 export function SideBarContent({}: ISideBarContentProps) {
+   const theme = useVainillaTheme();
   return (
-    <div className="w-full h-full bg-stone-700">
+    <div className={`w-full h-full ${theme.selectedTheme.definition.sidebarPanel}`}>
       <FileHierachy />
     </div>
   );

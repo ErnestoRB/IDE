@@ -160,9 +160,7 @@ export function Editor() {
 
   return (
     <div className="flex-1 w-full h-full">
-      <header className="bg-stone-800">
-        <OpenFiles />
-      </header>
+      <OpenFiles />
       {!mounted && (
         <div className="w-full h-full grid place-item bg-white text-black">
           Loading...

@@ -4,7 +4,7 @@ import { Editor } from "./editor/Editor";
 import { useCallback, useEffect, useRef } from "react";
 import { TerminalPanel } from "./terminal/TerminalPanel";
 import { useLayoutStore } from "./stores/layout";
-import { NavBar } from "./side/NavBar";
+import { NavBar } from "./top/items/NavBar";
 
 import {
   ImperativePanelHandle,

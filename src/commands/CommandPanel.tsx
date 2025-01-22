@@ -1,17 +1,21 @@
 import { useRef } from "react";
+import { useVainillaTheme } from "../theme";
 
 export function CommandPanel() {
   const inputRef = useRef<HTMLInputElement>(null!);
+  const theme = useVainillaTheme();
   const results = [];
 
   return (
-    <div className="text-white text-sm pt-1 pb-2 px-4 flex flex-col w-full min-w-64 max-w-md bg-stone-800">
-      <span className="w-full">Commands</span>
+    <div
+      className={`rounded-md text-sm pt-1 pb-2 px-4 flex flex-col w-full min-w-64 max-w-md ${theme.selectedTheme.definition["primary-4"]}  ${theme.selectedTheme.definition["text"]}`}
+    >
+      <span className="w-full">Comandos</span>
       <div className="flex">
         <input
           ref={inputRef}
           type="text"
-          className="bg-stone-600 w-full text-white px-2 py-1 focus:outline-none"
+          className={`w-full px-2 py-1 focus:outline-none ${theme.selectedTheme.definition["primary-2"]}`}
         ></input>
       </div>
       <div className="flex flex-col pt-2 text-sm">

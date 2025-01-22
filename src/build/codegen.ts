@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api";
-import { IFileContent, useFileStore } from "../stores/files";
+import { useFileStore } from "../stores/files";
 import { writeFile } from "@tauri-apps/api/fs";
 
 export type CodegenOutput = string | null;

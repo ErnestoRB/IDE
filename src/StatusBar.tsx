@@ -1,11 +1,14 @@
 import { useEditor } from "./stores/editor";
+import { useVainillaTheme } from "./theme";
 
 export function StatusBar() {
   const { editor, line, col } = useEditor();
-  return (
-    <div className="bg-black text-sm h-5 w-full flex items-center text-white select-none">
+  const theme = useVainillaTheme();
+    return (  
+  
+    <div className={` text-sm h-5 w-full flex items-center  select-none ${theme.selectedTheme.definition.statusBar}`}>
       {editor && (
-        <span className="ml-auto text-white bg-stone-800 px-2 justify-self-end">
+        <span className={`ml-auto px-2 justify-self-end ${theme.selectedTheme.definition.lineBar}`}>
           Line: {line}, Col: {col}
         </span>
       )}

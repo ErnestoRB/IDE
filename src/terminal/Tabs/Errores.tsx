@@ -1,16 +1,18 @@
 import { useFileStore } from "../../stores/files";
+import { useVainillaTheme } from "../../theme";
 
 export function Errores() {
   const lexicoResult = useFileStore((state) => state.lexicoResult);
   const sintacticoResult = useFileStore((state) => state.sintacticoResult);
   const semanticoResult = useFileStore((state) => state.semanticoResult);
+  const theme = useVainillaTheme();
 
   return (
-    <div className="px-4 pt-2 w-full h-full bg-stone-900 text-white grid overflow-y-auto overflow-x-hidden text-sm">
+    <div className={`px-4 pt-2 w-full h-full grid overflow-y-auto overflow-x-hidden text-sm ${theme.selectedTheme.definition["text"]} ${theme.selectedTheme.definition["primary-4"]}`}>
       {lexicoResult && lexicoResult[1] && lexicoResult[1].length > 0 && (
         <div>
           {lexicoResult[1].map((error, index) => (
-            <div key={index} className="text-red-400">
+            <div key={index} className="text-red-600">
               <p>
                 Error en el lexema '{error.lexemme}': {error.message}
               </p>

@@ -1,11 +1,13 @@
 import { useFileStore } from "../../stores/files";
+import { useVainillaTheme } from "../../theme";
 
 export function Lexico() {
 
   const lexicoResult = useFileStore((state) => state.lexicoResult);
+  const theme = useVainillaTheme();
 
   return (
-    <div className="px-4 pt-2 w-full h-full bg-stone-900 text-white grid overflow-y-auto overflow-x-hidden">
+    <div className={`px-4 pt-2 w-full h-full  ${theme.selectedTheme.definition["text"]} grid overflow-y-auto overflow-x-hidden ${theme.selectedTheme.definition["primary-4"]}`}>
     {lexicoResult && lexicoResult[0] && lexicoResult[0].length > 0 ? (
       <table className="table-auto">
         <thead>

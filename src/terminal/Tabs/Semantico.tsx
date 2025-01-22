@@ -5,10 +5,12 @@ import { MdOutlineExpand } from "react-icons/md";
 import { TreeNode } from "./Sintactico/TreeNode";
 import { useFileStore } from "../../stores/files";
 import { TreeNode as ITreeNode, Node } from "../../build/parse";
+import { useVainillaTheme } from "../../theme";
 export function Semantico() {
   const semanticoResult = useFileStore((state) => state.semanticoResult);
   const [treeIds, setTreeIds] = useState<string[]>([]);
   const [expandedItems, setExpanded] = useState<string[]>([]);
+  const theme = useVainillaTheme();
 
   useEffect(() => {
     if (semanticoResult && semanticoResult[2]) {
@@ -69,8 +71,8 @@ export function Semantico() {
   }, [semanticoResult]);
 
   return (
-    <div className="flex flex-col">
-      <div className="flex bg-black text-white px-2 gap-2">
+    <div className={`flex flex-col ${theme.selectedTheme.definition["text"]}`}>
+      <div className="flex bg-black px-2 gap-2">
         <button
           className="flex justify-center items-center"
           onClick={() => setExpanded(treeIds)}
@@ -88,8 +90,8 @@ export function Semantico() {
       </div>
       {semanticoResult && semanticoResult[2] && (
         <SimpleTreeView
-          expandedItems={expandedItems}
-          onExpandedItemsChange={(_, items) => setExpanded(items)}
+        expandedItems={expandedItems}
+        onExpandedItemsChange={(_, items) => setExpanded(items)}
         >
           <TreeNode showAttributes node={semanticoResult[2]}></TreeNode>
         </SimpleTreeView>

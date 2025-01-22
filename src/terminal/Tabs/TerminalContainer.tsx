@@ -3,11 +3,13 @@ import { useTerminalStore } from "../../stores/terminal";
 import "@xterm/xterm/css/xterm.css";
 import { useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
-import { Listbox, Tab } from "@headlessui/react";
-import { GoChevronDown, GoTerminal, GoTrash } from "react-icons/go";
+import { Tab } from "@headlessui/react";
+import { GoTerminal, GoTrash } from "react-icons/go";
 import { createTerminalItem, getDefaultShell } from "../backend";
+import { useVainillaTheme } from "../../theme";
 
 export function TerminalContainer() {
+  const theme = useVainillaTheme();
   const [shell, setDefaultShell] = useTerminalStore((s) => [
     s.shell,
     s.setDefaultShell,
@@ -54,43 +56,29 @@ export function TerminalContainer() {
         setActiveTerminal(terminals[tab]);
       }}
     >
-      <div className=" text-white w-full bg-stone-800 h-full flex flex-col justify-end overflow-y-auto overflow-x-hidden ">
+      <div
+        className={`w-full  h-full flex flex-col justify-end overflow-y-auto overflow-x-hidden ${theme.selectedTheme.definition.terminalPanel}`}
+      >
         <div
           id="terminal-select"
           className="h-10 flex flex-shrink-0 items-center gap-x-2 px-2"
         >
-          Shells disponibles:{" "}
+          Shells disponibles:
           <div className="relative">
             <select
               onChange={(e) => {
                 e.preventDefault();
                 setDefaultShell(e.target.value);
               }}
-              className="appearance-none flex items-center p-2 bg-stone-900 hover:bg-black pointer cursor-pointer rounded-sm outline-none"
+              className={`appearance-none flex items-center p-2  pointer cursor-pointer rounded-sm outline-none hover:opacity-90 ${theme.selectedTheme.definition["primary-5"]}`}
             >
               {availableShells?.map((shell, i) => (
-                <option key={i} value={shell}>
+                <option key={i} value={shell} className={`${theme.selectedTheme.definition["primary-5"]} `}>
                   {shell}
                 </option>
               ))}
             </select>
-            {/* <Listbox value={shell} onChange={setDefaultShell}>
-              <Listbox.Button className="flex items-center p-2 bg-stone-900 rounded-sm">
-                {shell}
-                <GoChevronDown></GoChevronDown>
-              </Listbox.Button>
-              <Listbox.Options className="absolute z-10 bg-stone-800 backdrop-opacity-60 backdrop-blur-sm h-24 overflow-auto">
-                {availableShells?.map((shell, i) => (
-                  <Listbox.Option
-                    className="px-2 py-1 hover:bg-stone-700 ui-selected:border-l-2  ui-not-selected:border-none border-white"
-                    key={i}
-                    value={shell}
-                  >
-                    {shell}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </Listbox> */}
+            
           </div>
           <button
             onClick={() => {
@@ -136,17 +124,17 @@ export function TerminalContainer() {
           <Panel minSize={10} maxSize={20}>
             <Tab.List
               as={"div"}
-              className="flex flex-col overflow-y-auto bg-stone-900 text-white flex-shrink-0 h-full"
+              className={`flex flex-col overflow-y-auto text-white flex-shrink-0 h-full ${theme.selectedTheme.definition["primary-4"]}`}
             >
               {terminals.map(({ shell, ttyId, ttyFunctions }) => (
                 <Tab
                   as="div"
                   key={ttyId}
-                  className="text-sm flex flex-grow-0 max-h-full px-2 py-1 ui-not-selected:border-none ui-selected:border-l-2 transition-all ui-selected:border-white"
+                  className={`text-sm flex flex-grow-0 max-h-full px-2 py-1 transition-all ${theme.selectedTheme.definition.terminalInstance}`}
                 >
-                  <div className="flex items-center gap-x-2 w-max h-full">
+                  <div className="flex flex-wrap items-center gap-x-2 h-full w-full">
                     <GoTerminal></GoTerminal>
-                    <span>{shell}</span>
+                    <span className="flex-1">{shell}</span>
                     <button
                       onClick={() => {
                         console.log(`Killing terminal ${ttyId}`);
