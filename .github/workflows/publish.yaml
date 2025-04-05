@@ -76,4 +76,4 @@ jobs:
         with:
           retention-days: 20
           name: ide-${{ github.sha }}-${{ matrix.settings.platform }}-${{ matrix.settings.arch }}
-          path: ${{ matrix.settings.platform == 'windows-latest' && 'src-tauri/target/release/bundle' || matrix.settings.platform == 'macos-latest' && 'src-tauri/target/release/**/*.dmg' || matrix.settings.platform == 'ubuntu-22.04' && 'src-tauri/target/release/bundle/deb' || '' }}
+          path: ${{ matrix.settings.platform == 'windows-latest' && 'src-tauri/target/release/bundle' || matrix.settings.platform == 'macos-latest' && 'src-tauri/target/*/release/bundle/dmg' || matrix.settings.platform == 'ubuntu-22.04' && 'src-tauri/target/release/bundle/deb' || '' }}
