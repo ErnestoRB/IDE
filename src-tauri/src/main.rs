@@ -3,7 +3,6 @@
 mod structures;
 mod terminal;
 
-use core::error;
 use std::collections::HashMap;
 use std::sync::Arc;
 
@@ -106,6 +105,10 @@ fn main() {
     let save = CustomMenuItem::new("save_file".to_string(), "Save").accelerator("CmdOrControl+S");
     let save_as = CustomMenuItem::new("save_file_as".to_string(), "Save As")
         .accelerator("CmdOrControl+Shift+S");
+
+    if let Err(err) = fix_path_env::fix() {
+        eprintln!("Error fixing path env: {}", err);
+    }
 
     let file_sub = Submenu::new(
         "File",
